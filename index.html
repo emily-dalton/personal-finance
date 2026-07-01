@@ -384,6 +384,28 @@
     box-shadow: 0 1px 3px rgba(33,31,26,.08);
   }
   .back-btn:hover { color: var(--ink); border-color: var(--clay); }
+
+  /* ── Resume stage ── */
+  .resume-stat-strip {
+    display: flex; border: 1px solid var(--hairline-dark);
+    border-radius: 12px; overflow: hidden; margin: 22px 0 28px;
+  }
+  .resume-stat-cell {
+    flex: 1; padding: 14px 16px;
+    border-right: 1px solid rgba(33,31,26,.08);
+  }
+  .resume-stat-cell:last-child { border-right: none; }
+  .resume-stat-val { font-family: 'Newsreader', serif; font-size: 24px; color: var(--ink); margin-top: 4px; }
+
+  /* ── Saved indicator ── */
+  .saved-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
+    letter-spacing: .06em; text-transform: uppercase;
+    color: var(--sage); opacity: 0; transition: opacity .4s;
+  }
+  .saved-badge.show { opacity: 1; }
+  .saved-dot { width: 6px; height: 6px; border-radius: 99px; background: var(--sage); }
 </style>
 </head>
 <body>
@@ -397,6 +419,42 @@
         <div class="app-name">Planner in a box</div>
       </div>
       <div class="eyebrow" style="letter-spacing:.06em">SETUP</div>
+    </div>
+
+    <!-- Stage: resume (shown on return visits with saved data) -->
+    <div id="stage-resume" class="stage">
+      <div style="padding:40px 44px 44px">
+        <div class="eyebrow" style="margin-bottom:18px">Welcome back</div>
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px">
+          <div style="font:400 44px/1 'Newsreader',serif;letter-spacing:-.02em;color:var(--ink)" id="resume-nw">$612k</div>
+          <div style="font:500 14px 'Hanken Grotesk';color:var(--muted)" id="resume-nw-label">net worth</div>
+        </div>
+        <div style="font:400 13px 'Hanken Grotesk';color:var(--faint);margin-bottom:2px" id="resume-source-line"></div>
+
+        <div class="resume-stat-strip">
+          <div class="resume-stat-cell">
+            <div class="eyebrow">Retire at</div>
+            <div class="resume-stat-val" id="resume-retire">65</div>
+          </div>
+          <div class="resume-stat-cell">
+            <div class="eyebrow">Saving / mo</div>
+            <div class="resume-stat-val" id="resume-monthly">$4,300</div>
+          </div>
+          <div class="resume-stat-cell">
+            <div class="eyebrow">Model</div>
+            <div class="resume-stat-val" id="resume-model">4% Rule</div>
+          </div>
+          <div class="resume-stat-cell">
+            <div class="eyebrow">Spend / yr</div>
+            <div class="resume-stat-val" id="resume-spend">$132k</div>
+          </div>
+        </div>
+
+        <button class="connect-btn enabled" id="resume-continue-btn">Continue where you left off →</button>
+        <div style="text-align:center;margin-top:14px">
+          <span class="reset-link" id="resume-startfresh">Start fresh</span>
+        </div>
+      </div>
     </div>
 
     <!-- Stage: choose -->
@@ -509,7 +567,10 @@
           <div class="household-sub">Planner in a box · retirement plan</div>
         </div>
       </div>
-      <div class="source-badge" id="source-badge">DEMO DATA · 6 ACCOUNTS</div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div class="saved-badge" id="saved-badge"><span class="saved-dot"></span>Saved</div>
+        <div class="source-badge" id="source-badge">DEMO DATA · 6 ACCOUNTS</div>
+      </div>
     </div>
 
     <div class="lab-body">
@@ -942,7 +1003,7 @@ function render() {
     <div class="account-row">
       <div class="account-row-main${r.isDebt?' caution':''}">
         <span>${r.label}</span>
-        <span>${r.isDebt?'−':''}$${Math.round(Math.abs(r.val)/1000)*1000 >= 1000 ? fmtMoney(Math.abs(r.val)) : Math.round(Math.abs(r.val)).toLocaleString()}</span>
+        <span>${r.isDebt?'−':''}${fmtMoney(Math.abs(r.val))}</span>
       </div>
       ${r.sub ? `<div class="account-row-sub">${r.sub}</div>` : ''}
     </div>
@@ -976,6 +1037,65 @@ function render() {
 function fmtMoney(n) {
   if (n >= 1e6) return '$' + (n/1e6).toFixed(2).replace(/\.?0+$/, '') + 'M';
   return '$' + Math.round(n).toLocaleString();
+}
+
+// ═══════════════════════════════════════════════════════════
+// PERSISTENCE
+// ═══════════════════════════════════════════════════════════
+const STORAGE_KEY = 'planner-v1';
+const MODEL_LABELS = { '4pct':'4% Rule', '25x':'25× Number', 'guard':'Guardrails', 'mc':'Monte Carlo' };
+
+let saveTimer = null;
+function saveState() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        retireAge: state.retireAge, monthly: state.monthly,
+        ret: state.ret, spend: state.spend,
+        house: state.house, college: state.college, yearoff: state.yearoff,
+        model: state.model, userAge: state.userAge,
+        accountData: state.accountData, connSource: state.connSource,
+        demoMode: state.demoMode,
+      }));
+      flashSaved();
+    } catch(e) {}
+  }, 400);
+}
+
+function loadSavedState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) { return null; }
+}
+
+function clearSavedState() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+}
+
+let savedFadeTimer = null;
+function flashSaved() {
+  const badge = $('saved-badge');
+  if (!badge) return;
+  badge.classList.add('show');
+  clearTimeout(savedFadeTimer);
+  savedFadeTimer = setTimeout(() => badge.classList.remove('show'), 2000);
+}
+
+function showResume(saved) {
+  // Restore state
+  Object.assign(state, saved);
+  const nw = netWorth();
+  const srcName = state.demoMode ? 'Demo data'
+    : (state.connSource && PROV_MAP[state.connSource] ? PROV_MAP[state.connSource].name : 'Manual entry');
+
+  $('resume-nw').textContent = fmtMoney(Math.abs(nw));
+  $('resume-nw-label').textContent = nw < 0 ? 'net worth (negative)' : 'net worth';
+  $('resume-source-line').textContent = 'Last saved · ' + srcName;
+  $('resume-retire').textContent = state.retireAge;
+  $('resume-monthly').textContent = '$' + state.monthly.toLocaleString();
+  $('resume-model').textContent = MODEL_LABELS[state.model] || state.model;
+  $('resume-spend').textContent = fmt(state.spend);
+
+  showStage('stage-resume');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1118,6 +1238,7 @@ function confirmAccounts() {
   });
   state.accountData = newData;
   state.userAge = parseInt($('age-input').value) || 38;
+  saveState();
   goToReady(false);
 }
 
@@ -1141,6 +1262,7 @@ function goToReady(isDemo) {
 function goToChoose() {
   state.connSource = null; state.demoMode = false;
   state.accountData = null; state.csvAccountMap = null;
+  clearSavedState();
   renderProviders(); updateConnectBtn();
   showStage('stage-choose');
 }
@@ -1202,25 +1324,43 @@ $('open-planner-btn').addEventListener('click', () => {
 });
 $('reset-link').addEventListener('click', goToChoose);
 
+// Resume stage
+$('resume-continue-btn').addEventListener('click', () => {
+  showScreen('screen-lab');
+  render();
+});
+$('resume-startfresh').addEventListener('click', () => {
+  // Reset planner inputs to defaults too
+  Object.assign(state, { retireAge:65, monthly:4300, ret:6, spend:132000,
+    house:false, college:false, yearoff:false, model:'4pct' });
+  goToChoose();
+});
+
 // Lab
 $('back-btn').addEventListener('click', () => showScreen('screen-connect'));
 document.querySelectorAll('.model-card').forEach(el => {
-  el.addEventListener('click', () => { state.model = el.dataset.model; render(); });
+  el.addEventListener('click', () => { state.model = el.dataset.model; render(); saveState(); });
 });
-$('sl-retire').addEventListener('input',  e => { state.retireAge = +e.target.value; render(); });
-$('sl-monthly').addEventListener('input', e => { state.monthly   = +e.target.value; render(); });
-$('sl-ret').addEventListener('input',     e => { state.ret       = +e.target.value; render(); });
-$('sl-spend').addEventListener('input',   e => { state.spend     = +e.target.value; render(); });
-$('pill-house').addEventListener('click',   () => { state.house   = !state.house;   render(); });
-$('pill-college').addEventListener('click', () => { state.college = !state.college; render(); });
-$('pill-yearoff').addEventListener('click', () => { state.yearoff = !state.yearoff; render(); });
+$('sl-retire').addEventListener('input',  e => { state.retireAge = +e.target.value; render(); saveState(); });
+$('sl-monthly').addEventListener('input', e => { state.monthly   = +e.target.value; render(); saveState(); });
+$('sl-ret').addEventListener('input',     e => { state.ret       = +e.target.value; render(); saveState(); });
+$('sl-spend').addEventListener('input',   e => { state.spend     = +e.target.value; render(); saveState(); });
+$('pill-house').addEventListener('click',   () => { state.house   = !state.house;   render(); saveState(); });
+$('pill-college').addEventListener('click', () => { state.college = !state.college; render(); saveState(); });
+$('pill-yearoff').addEventListener('click', () => { state.yearoff = !state.yearoff; render(); saveState(); });
 
 // ═══════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════
 renderProviders();
 updateConnectBtn();
-showStage('stage-choose');
+
+const saved = loadSavedState();
+if (saved && (saved.accountData || saved.demoMode)) {
+  showResume(saved);
+} else {
+  showStage('stage-choose');
+}
 </script>
 </body>
 </html>
