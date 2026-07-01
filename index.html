@@ -40,11 +40,9 @@
     min-height: 100vh;
   }
 
-  /* ── Screens ── */
   .screen { display: none; }
   .screen.active { display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px 80px; min-height: 100vh; }
 
-  /* ── Card ── */
   .card {
     background: var(--surface);
     border: 1px solid var(--hairline);
@@ -53,353 +51,306 @@
     overflow: hidden;
   }
 
-  /* ── Type helpers ── */
   .eyebrow {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .1em;
-    text-transform: uppercase;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase;
     color: var(--faint);
   }
-  .mono { font-family: 'IBM Plex Mono', monospace; }
-  .serif { font-family: 'Newsreader', serif; }
 
-  /* ── Connect Screen ── */
-  #screen-connect { background: var(--bg); }
-
+  /* ── Connect card ── */
   .connect-card { width: 760px; }
 
   .connect-header {
     padding: 22px 36px;
     border-bottom: 1px solid var(--hairline);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
   }
   .connect-header-left { display: flex; align-items: center; gap: 11px; }
   .app-monogram {
-    width: 26px; height: 26px;
-    border-radius: 7px;
-    background: var(--ink);
-    color: var(--surface);
-    font-family: 'Newsreader', serif;
-    font-size: 13px; font-weight: 600;
+    width: 26px; height: 26px; border-radius: 7px;
+    background: var(--ink); color: var(--surface);
+    font-family: 'Newsreader', serif; font-size: 13px; font-weight: 600;
     display: flex; align-items: center; justify-content: center;
   }
   .app-name { font-size: 14px; font-weight: 500; color: var(--ink); }
 
-  /* Stage: choose */
+  /* Stage wrapper */
+  .stage { display: none; }
+  .stage.active { display: block; }
+
+  /* ── Stage: choose ── */
   #stage-choose { padding: 34px 44px 40px; }
   .connect-headline {
     font-family: 'Newsreader', serif;
-    font-size: 28px; font-weight: 400;
-    letter-spacing: -.01em;
-    color: var(--ink);
-    margin-bottom: 10px;
+    font-size: 28px; font-weight: 400; letter-spacing: -.01em;
+    color: var(--ink); margin-bottom: 10px;
   }
   .connect-sub {
-    font-size: 14.5px; line-height: 1.65;
-    color: var(--muted);
-    max-width: 520px;
-    margin-bottom: 28px;
+    font-size: 14.5px; line-height: 1.65; color: var(--muted);
+    max-width: 520px; margin-bottom: 28px;
   }
   .provider-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 22px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 22px;
   }
   .provider-tile {
     display: flex; align-items: center; gap: 12px;
-    padding: 13px 15px;
-    border-radius: 12px;
-    border: 1px solid var(--hairline);
-    background: var(--surface);
-    cursor: pointer;
-    transition: all .15s;
+    padding: 13px 15px; border-radius: 12px;
+    border: 1px solid var(--hairline); background: var(--surface);
+    cursor: pointer; transition: all .15s;
   }
-  .provider-tile:hover { border-color: var(--clay); }
-  .provider-tile.selected {
-    border: 1.5px solid var(--clay);
-    background: rgba(122,106,74,.07);
+  .provider-tile:hover:not(.disabled) { border-color: var(--clay); }
+  .provider-tile.selected { border: 1.5px solid var(--clay); background: rgba(122,106,74,.07); }
+  .provider-tile.disabled {
+    opacity: 0.38; cursor: not-allowed;
+    pointer-events: none;
   }
   .provider-dot {
-    width: 34px; height: 34px;
-    border-radius: 9px;
-    flex: none;
+    width: 34px; height: 34px; border-radius: 9px; flex: none;
     display: flex; align-items: center; justify-content: center;
-    color: #fff;
-    font-family: 'Newsreader', serif;
-    font-size: 15px; font-weight: 600;
+    color: #fff; font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600;
   }
   .provider-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .provider-soon {
+    margin-left: auto; font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 500; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--faintest);
+  }
 
   .connect-btn {
-    width: 100%; padding: 14px;
-    border-radius: 11px; border: none;
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px; font-weight: 600;
-    cursor: pointer;
-    transition: all .15s;
+    width: 100%; padding: 14px; border-radius: 11px; border: none;
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all .15s;
   }
-  .connect-btn.disabled {
-    background: rgba(33,31,26,.09);
-    color: var(--faint);
-    cursor: default;
-  }
-  .connect-btn.enabled {
-    background: var(--ink);
-    color: var(--surface);
-  }
+  .connect-btn.disabled { background: rgba(33,31,26,.09); color: var(--faint); cursor: default; }
+  .connect-btn.enabled { background: var(--ink); color: var(--surface); }
 
-  .or-divider {
-    display: flex; align-items: center; gap: 14px;
-    margin: 26px 0;
-  }
+  .or-divider { display: flex; align-items: center; gap: 14px; margin: 26px 0; }
   .or-line { flex: 1; height: 1px; background: rgba(33,31,26,.1); }
   .or-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--faintest); font-weight: 500; }
 
   .demo-card {
     display: flex; align-items: center; justify-content: space-between; gap: 20px;
-    padding: 20px 22px;
-    background: var(--surface-sunken);
-    border: 1px solid var(--hairline);
-    border-radius: 13px;
+    padding: 20px 22px; background: var(--surface-sunken);
+    border: 1px solid var(--hairline); border-radius: 13px;
   }
   .demo-title { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
   .demo-sub { font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 360px; }
   .demo-btn {
-    flex: none;
-    padding: 13px 20px;
-    border-radius: 10px;
-    border: 1px solid var(--clay);
-    background: transparent;
-    color: var(--clay);
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 13.5px; font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all .15s;
+    flex: none; padding: 13px 20px; border-radius: 10px;
+    border: 1px solid var(--clay); background: transparent; color: var(--clay);
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 13.5px; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: all .15s;
   }
   .demo-btn:hover { background: rgba(122,106,74,.08); }
+  .security-note { display: flex; align-items: center; gap: 8px; margin-top: 24px; font-size: 12px; color: var(--faint); }
+  .security-box { width: 13px; height: 13px; border: 1.5px solid var(--faint); border-radius: 3px; display: inline-block; flex: none; }
 
-  .security-note {
-    display: flex; align-items: center; gap: 8px;
-    margin-top: 24px;
-    font-size: 12px; color: var(--faint);
+  /* ── Stage: csv-upload ── */
+  #stage-csv-upload { padding: 34px 44px 40px; }
+
+  .stage-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 500; color: var(--faint);
+    cursor: pointer; margin-bottom: 24px; transition: color .15s;
+    background: none; border: none; padding: 0; font-family: 'Hanken Grotesk', sans-serif;
   }
-  .security-box {
-    width: 13px; height: 13px;
-    border: 1.5px solid var(--faint);
-    border-radius: 3px;
-    display: inline-block;
-    flex: none;
+  .stage-back:hover { color: var(--ink); }
+
+  .provider-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .provider-header-dot {
+    width: 30px; height: 30px; border-radius: 9px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: 'Newsreader', serif; font-size: 14px; font-weight: 600;
   }
 
-  /* Stage: ready */
+  .export-steps {
+    background: var(--surface-sunken);
+    border: 1px solid var(--hairline); border-radius: 12px;
+    padding: 18px 22px; margin-bottom: 24px;
+  }
+  .export-steps-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+  .export-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: 13px; line-height: 1.5; color: var(--muted);
+    padding: 6px 0; border-bottom: 1px solid var(--hairline);
+  }
+  .export-step:last-child { border-bottom: none; padding-bottom: 0; }
+  .step-num {
+    width: 20px; height: 20px; border-radius: 99px; flex: none;
+    background: var(--ink); color: var(--surface);
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+
+  .dropzone {
+    border: 1.5px dashed rgba(33,31,26,.2); border-radius: 13px;
+    padding: 36px 24px; text-align: center; cursor: pointer;
+    transition: all .15s; position: relative; background: var(--surface);
+  }
+  .dropzone:hover, .dropzone.drag-over { border-color: var(--clay); background: rgba(122,106,74,.04); }
+  .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .dropzone-icon { font-size: 28px; margin-bottom: 10px; }
+  .dropzone-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .dropzone-sub { font-size: 12.5px; color: var(--faint); }
+  .dropzone-file-name {
+    display: none; margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;
+    color: var(--sage); font-weight: 500;
+  }
+
+  .skip-link {
+    display: block; text-align: center; margin-top: 18px;
+    font-size: 13px; color: var(--clay); cursor: pointer;
+    text-decoration: underline; text-underline-offset: 3px;
+    background: none; border: none; font-family: 'Hanken Grotesk', sans-serif; width: 100%;
+  }
+
+  /* ── Stage: csv-review ── */
+  #stage-csv-review { padding: 34px 44px 40px; }
+
+  .review-rows { display: flex; flex-direction: column; margin: 24px 0; }
+  .review-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    padding: 16px 0; border-bottom: 1px solid var(--hairline);
+  }
+  .review-row:last-child { border-bottom: none; }
+  .review-row-left { flex: 1; min-width: 0; }
+  .review-row-label { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  .review-row-label.debt-label { color: var(--caution); }
+  .acct-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .acct-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
+    padding: 3px 8px; border-radius: 5px;
+    background: rgba(33,31,26,.06); color: var(--muted);
+  }
+  .no-accts { font-size: 12px; color: var(--faintest); font-style: italic; }
+
+  .balance-field { display: flex; align-items: center; gap: 4px; }
+  .balance-sign { font-size: 14px; font-weight: 500; color: var(--faint); }
+  .balance-sign.neg { color: var(--caution); }
+  .balance-input {
+    width: 130px; padding: 8px 10px;
+    border: 1px solid var(--hairline-dark); border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500;
+    color: var(--ink); background: var(--surface); text-align: right;
+    outline: none; transition: border-color .15s;
+  }
+  .balance-input.debt-input { color: var(--caution); }
+  .balance-input:focus { border-color: var(--clay); }
+  .balance-hint {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+    color: var(--faintest); margin-top: 4px; text-align: right;
+  }
+
+  .review-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 20px; border-top: 1px solid var(--hairline-dark); margin-top: 4px;
+    gap: 20px;
+  }
+  .review-nw-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); margin-bottom: 4px; }
+  .review-nw-val { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 400; color: var(--ink); letter-spacing: -.01em; }
+
+  .age-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .age-label { font-size: 13px; font-weight: 500; color: var(--muted); }
+  .age-input {
+    width: 64px; padding: 7px 10px;
+    border: 1px solid var(--hairline-dark); border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500;
+    color: var(--ink); background: var(--surface); text-align: center;
+    outline: none; transition: border-color .15s;
+  }
+  .age-input:focus { border-color: var(--clay); }
+  .age-hint { font-size: 12px; color: var(--faint); }
+
+  .confirm-btn {
+    flex: none; padding: 13px 24px; border-radius: 11px; border: none;
+    background: var(--ink); color: var(--surface);
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: opacity .15s; white-space: nowrap;
+  }
+  .confirm-btn:hover { opacity: .85; }
+
+  /* ── Stage: ready ── */
   #stage-ready { display: none; padding: 48px 44px 44px; text-align: center; }
   .ready-check {
-    width: 54px; height: 54px;
-    border-radius: 99px;
-    background: var(--sage);
-    color: var(--surface);
-    font-family: 'Newsreader', serif;
-    font-size: 26px;
+    width: 54px; height: 54px; border-radius: 99px;
+    background: var(--sage); color: var(--surface);
+    font-family: 'Newsreader', serif; font-size: 26px;
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 22px;
   }
-  .ready-title {
-    font-family: 'Newsreader', serif;
-    font-size: 27px; font-weight: 400;
-    letter-spacing: -.01em;
-    color: var(--ink);
-    margin-bottom: 12px;
-  }
-  .ready-sub {
-    font-size: 14px; line-height: 1.65;
-    color: var(--muted);
-    max-width: 440px;
-    margin: 0 auto 26px;
-  }
-  .stat-strip {
-    display: flex; justify-content: center;
-    max-width: 440px; margin: 0 auto 30px;
-    border: 1px solid var(--hairline-dark);
-    border-radius: 12px; overflow: hidden;
-  }
-  .stat-cell {
-    flex: 1; padding: 16px 10px;
-    border-right: 1px solid rgba(33,31,26,.08);
-  }
+  .ready-title { font-family: 'Newsreader', serif; font-size: 27px; font-weight: 400; letter-spacing: -.01em; color: var(--ink); margin-bottom: 12px; }
+  .ready-sub { font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 440px; margin: 0 auto 26px; }
+  .stat-strip { display: flex; justify-content: center; max-width: 440px; margin: 0 auto 30px; border: 1px solid var(--hairline-dark); border-radius: 12px; overflow: hidden; }
+  .stat-cell { flex: 1; padding: 16px 10px; border-right: 1px solid rgba(33,31,26,.08); }
   .stat-cell:last-child { border-right: none; }
-  .stat-val {
-    font-family: 'Newsreader', serif;
-    font-size: 20px; font-weight: 400;
-    color: var(--ink);
-  }
+  .stat-val { font-family: 'Newsreader', serif; font-size: 20px; color: var(--ink); }
   .stat-val.sage { color: var(--sage); }
-  .stat-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px; font-weight: 500;
-    text-transform: uppercase; letter-spacing: .06em;
-    color: var(--faint);
-    margin-top: 5px;
-  }
+  .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); margin-top: 5px; }
   .open-btn {
-    display: inline-block;
-    padding: 14px 28px;
-    border-radius: 11px;
-    background: var(--ink);
-    color: var(--surface);
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px; font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    border: none;
-    transition: opacity .15s;
+    display: inline-block; padding: 14px 28px; border-radius: 11px;
+    background: var(--ink); color: var(--surface);
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
+    text-decoration: none; cursor: pointer; border: none; transition: opacity .15s;
   }
   .open-btn:hover { opacity: .85; }
-  .reset-link {
-    display: block; margin-top: 18px;
-    font-size: 13px; font-weight: 500;
-    color: var(--clay);
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
+  .reset-link { display: block; margin-top: 18px; font-size: 13px; font-weight: 500; color: var(--clay); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
-  /* ── Lab Screen ── */
+  /* ── Lab screen ── */
   #screen-lab { background: var(--bg); }
   .lab-card { width: 1240px; }
 
-  .lab-header {
-    padding: 24px 36px;
-    border-bottom: 1px solid var(--hairline);
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .lab-header { padding: 24px 36px; border-bottom: 1px solid var(--hairline); display: flex; align-items: center; justify-content: space-between; }
   .lab-header-left { display: flex; align-items: center; gap: 13px; }
   .avatars { display: flex; }
-  .avatar {
-    width: 28px; height: 28px;
-    border-radius: 99px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600;
-    border: 2px solid var(--surface);
-  }
+  .avatar { width: 28px; height: 28px; border-radius: 99px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; border: 2px solid var(--surface); }
   .avatar-a { background: var(--avatar-a-bg); color: var(--avatar-a-text); }
   .avatar-j { background: var(--avatar-j-bg); color: var(--avatar-j-text); margin-left: -8px; }
   .household-name { font-size: 14px; font-weight: 500; color: var(--ink); }
   .household-sub { font-size: 11.5px; color: var(--faint); margin-top: 1px; }
-  .source-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; font-weight: 500;
-    letter-spacing: .06em; color: var(--faint);
-  }
+  .source-badge { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: .06em; color: var(--faint); }
 
   .lab-body { display: grid; grid-template-columns: 300px 1fr; }
 
-  /* Accounts panel */
-  .accounts-panel {
-    padding: 28px 30px;
-    border-right: 1px solid var(--hairline);
-    background: var(--surface-sunken);
-  }
-  .accounts-panel .eyebrow { margin-bottom: 6px; }
-  .accounts-caption { font-size: 12px; line-height: 1.5; color: var(--faint); margin-bottom: 22px; }
+  .accounts-panel { padding: 28px 30px; border-right: 1px solid var(--hairline); background: var(--surface-sunken); }
+  .accounts-caption { font-size: 12px; line-height: 1.5; color: var(--faint); margin: 6px 0 22px; }
   .account-rows { display: flex; flex-direction: column; gap: 15px; }
-  .account-row { }
   .account-row-main { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 500; color: var(--ink); }
   .account-row-main.caution { color: var(--caution); }
   .account-row-sub { font-size: 11.5px; color: var(--faint); margin-top: 3px; }
-  .net-worth-footer {
-    margin-top: 22px; padding-top: 18px;
-    border-top: 1px solid rgba(33,31,26,.1);
-  }
+  .net-worth-footer { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(33,31,26,.1); }
   .net-worth-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); }
-  .net-worth-val {
-    font-family: 'Newsreader', serif;
-    font-size: 34px; font-weight: 400;
-    color: var(--ink); letter-spacing: -.01em;
-    margin-top: 6px;
-  }
+  .net-worth-val { font-family: 'Newsreader', serif; font-size: 34px; color: var(--ink); letter-spacing: -.01em; margin-top: 6px; }
 
-  /* Model + projection */
   .model-panel { padding: 26px 34px; }
-
-  .model-grid {
-    display: grid; grid-template-columns: repeat(4,1fr);
-    gap: 10px; margin-bottom: 24px;
-  }
-  .model-card {
-    border-radius: 11px;
-    padding: 13px 14px;
-    cursor: pointer;
-    transition: all .15s;
-    text-align: left;
-    border: 1px solid var(--hairline-dark);
-    background: var(--surface-sunken);
-    color: var(--ink);
-  }
+  .model-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 24px; }
+  .model-card { border-radius: 11px; padding: 13px 14px; cursor: pointer; transition: all .15s; text-align: left; border: 1px solid var(--hairline-dark); background: var(--surface-sunken); color: var(--ink); }
   .model-card:hover { border-color: var(--clay); }
-  .model-card.active {
-    border-color: var(--clay);
-    background: var(--clay);
-    color: #fffdf8;
-  }
+  .model-card.active { border-color: var(--clay); background: var(--clay); color: #fffdf8; }
   .model-card-name { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
   .model-card-desc { font-size: 11px; opacity: .78; }
 
-  .result-row {
-    display: flex; align-items: flex-start;
-    justify-content: space-between; gap: 24px;
-    margin-bottom: 16px;
-  }
+  .result-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
   .result-left .m-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); }
-  .result-left .m-big {
-    font-family: 'Newsreader', serif;
-    font-size: 44px; line-height: 1;
-    letter-spacing: -.02em; color: var(--ink);
-    margin-top: 8px;
-  }
+  .result-left .m-big { font-family: 'Newsreader', serif; font-size: 44px; line-height: 1; letter-spacing: -.02em; color: var(--ink); margin-top: 8px; }
   .result-left .m-sub { font-size: 12.5px; font-weight: 500; color: var(--muted); margin-top: 9px; }
   .result-right { max-width: 330px; text-align: right; }
   .result-right .m-note { font-size: 13px; line-height: 1.55; font-weight: 500; }
-  .result-right .m-fine {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px; font-weight: 500;
-    letter-spacing: .04em; text-transform: uppercase;
-    color: var(--faintest);
-    margin-top: 10px;
-  }
+  .result-right .m-fine { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--faintest); margin-top: 10px; }
 
   .chart-svg { width: 100%; height: auto; display: block; }
-  .x-axis {
-    display: flex; justify-content: space-between;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; font-weight: 500;
-    color: var(--faintest);
-    padding: 2px 4px 0;
-  }
+  .x-axis { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: var(--faintest); padding: 2px 4px 0; }
   .x-axis .today { color: var(--ink); }
-
   .legend { display: flex; gap: 18px; font-size: 11.5px; color: var(--faint); padding: 10px 4px 0; }
   .legend-item { display: inline-flex; align-items: center; gap: 7px; }
   .legend-solid { width: 16px; height: 2px; background: var(--sage); border-radius: 2px; }
   .legend-dashed { width: 16px; height: 0; border-top: 1.5px dashed rgba(33,31,26,.4); }
   .legend-band { width: 16px; height: 9px; background: var(--sage); opacity: .3; border-radius: 2px; }
 
-  .sliders-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 18px 34px;
-    margin-top: 22px; padding-top: 22px;
-    border-top: 1px solid var(--hairline);
-  }
-  .slider-row { }
-  .slider-header {
-    display: flex; justify-content: space-between;
-    margin-bottom: 8px;
-  }
+  .sliders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 34px; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--hairline); }
+  .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
   .slider-label { font-size: 12.5px; font-weight: 500; color: var(--muted); }
   .slider-val { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; color: var(--ink); }
   input[type=range] { width: 100%; accent-color: var(--clay); cursor: pointer; display: block; }
@@ -407,63 +358,32 @@
   .whatifs { margin-top: 20px; }
   .whatifs-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); margin-bottom: 12px; }
   .pills { display: flex; flex-wrap: wrap; gap: 10px; }
-  .pill {
-    font-size: 12.5px; font-weight: 500;
-    border-radius: 99px; padding: 9px 15px;
-    cursor: pointer; transition: all .15s;
-    color: var(--muted);
-    border: 1px solid rgba(33,31,26,.16);
-    background: transparent;
-    font-family: 'Hanken Grotesk', sans-serif;
-  }
+  .pill { font-size: 12.5px; font-weight: 500; border-radius: 99px; padding: 9px 15px; cursor: pointer; transition: all .15s; color: var(--muted); border: 1px solid rgba(33,31,26,.16); background: transparent; font-family: 'Hanken Grotesk', sans-serif; }
   .pill:hover { border-color: var(--clay); color: var(--ink); }
   .pill.active { color: #fffdf8; border-color: var(--clay); background: var(--clay); }
 
-  /* Risks panel */
-  .risks-panel {
-    padding: 26px 36px;
-    border-top: 1px solid var(--hairline);
-    background: var(--ink);
-  }
-  .risks-header {
-    display: flex; align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-  .risks-title { font-family: 'Newsreader', serif; font-size: 18px; font-weight: 400; color: var(--ink-on-dark); }
+  .risks-panel { padding: 26px 36px; border-top: 1px solid var(--hairline); background: var(--ink); }
+  .risks-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
+  .risks-title { font-family: 'Newsreader', serif; font-size: 18px; color: var(--ink-on-dark); }
   .risks-caption { font-size: 12px; color: #8a8478; }
   .risks-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
-  .risk-card {
-    background: #2a2722;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 12px;
-    padding: 16px 16px 18px;
-  }
+  .risk-card { background: #2a2722; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 16px 16px 18px; }
   .risk-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
   .risk-dot { width: 8px; height: 8px; border-radius: 99px; flex: none; }
   .risk-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; }
   .risk-title { font-size: 13.5px; font-weight: 600; color: var(--ink-on-dark); margin-bottom: 7px; }
   .risk-body { font-size: 12.5px; line-height: 1.55; color: #9a948a; }
 
-  /* Back button */
   .back-btn {
     position: fixed; top: 20px; left: 20px;
-    background: var(--surface);
-    border: 1px solid var(--hairline-dark);
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 12.5px; font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    font-family: 'Hanken Grotesk', sans-serif;
-    display: none;
-    transition: all .15s;
-    z-index: 100;
+    background: var(--surface); border: 1px solid var(--hairline-dark);
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 12.5px; font-weight: 500; color: var(--muted);
+    cursor: pointer; font-family: 'Hanken Grotesk', sans-serif;
+    display: none; transition: all .15s; z-index: 100;
     box-shadow: 0 1px 3px rgba(33,31,26,.08);
   }
   .back-btn:hover { color: var(--ink); border-color: var(--clay); }
-  #screen-lab.active ~ .back-btn,
-  .back-btn.visible { display: block; }
 </style>
 </head>
 <body>
@@ -480,56 +400,97 @@
     </div>
 
     <!-- Stage: choose -->
-    <div id="stage-choose">
-      <h2 class="connect-headline">Bring your finances in.</h2>
-      <p class="connect-sub">Works with the tools you already use — or none at all. Connections are read-only and secure; the planner never moves your money.</p>
-
-      <div class="eyebrow" style="margin-bottom:14px">Connect a source</div>
-      <div class="provider-grid" id="provider-grid"></div>
-      <button class="connect-btn disabled" id="connect-btn">Choose a source above</button>
-
-      <div class="or-divider">
-        <div class="or-line"></div>
-        <div class="or-label">OR</div>
-        <div class="or-line"></div>
-      </div>
-
-      <div class="demo-card">
-        <div>
-          <div class="demo-title">Just looking around?</div>
-          <div class="demo-sub">Explore the full planner with a sample household — no account, no sign-up, nothing connected.</div>
+    <div id="stage-choose" class="stage active">
+      <div style="padding:34px 44px 40px">
+        <h2 class="connect-headline">Bring your finances in.</h2>
+        <p class="connect-sub">Works with the tools you already use — or none at all. Connections are read-only and secure; the planner never moves your money.</p>
+        <div class="eyebrow" style="margin-bottom:14px">Connect a source</div>
+        <div class="provider-grid" id="provider-grid"></div>
+        <button class="connect-btn disabled" id="connect-btn">Choose a source above</button>
+        <div class="or-divider">
+          <div class="or-line"></div>
+          <div class="or-label">OR</div>
+          <div class="or-line"></div>
         </div>
-        <button class="demo-btn" id="demo-btn">Enter demo mode →</button>
+        <div class="demo-card">
+          <div>
+            <div class="demo-title">Just looking around?</div>
+            <div class="demo-sub">Explore the full planner with a sample household — no account, no sign-up, nothing connected.</div>
+          </div>
+          <button class="demo-btn" id="demo-btn">Enter demo mode →</button>
+        </div>
+        <div class="security-note">
+          <span class="security-box"></span>
+          Bank-level encryption · read-only · you can disconnect any source anytime.
+        </div>
       </div>
+    </div>
 
-      <div class="security-note">
-        <span class="security-box"></span>
-        Bank-level encryption · read-only · you can disconnect any source anytime.
+    <!-- Stage: csv-upload -->
+    <div id="stage-csv-upload" class="stage">
+      <div style="padding:34px 44px 40px">
+        <button class="stage-back" id="back-to-choose">← Back</button>
+        <div class="provider-header">
+          <div class="provider-header-dot" id="upload-prov-dot"></div>
+          <h2 class="connect-headline" style="margin:0" id="upload-headline"></h2>
+        </div>
+        <p class="connect-sub" id="upload-sub"></p>
+
+        <div class="export-steps" id="export-steps"></div>
+
+        <div class="dropzone" id="csv-dropzone">
+          <input type="file" id="csv-file-input" accept=".csv,.CSV">
+          <div class="dropzone-icon">📂</div>
+          <div class="dropzone-title">Drop your CSV here, or click to browse</div>
+          <div class="dropzone-sub">Exported from your finance app · .csv files only</div>
+          <div class="dropzone-file-name" id="dropzone-filename"></div>
+        </div>
+
+        <button class="skip-link" id="skip-to-manual">Skip — I'll enter my balances manually</button>
+      </div>
+    </div>
+
+    <!-- Stage: csv-review -->
+    <div id="stage-csv-review" class="stage">
+      <div style="padding:34px 44px 40px">
+        <button class="stage-back" id="back-to-upload">← Back</button>
+        <h2 class="connect-headline">Review your balances</h2>
+        <p class="connect-sub" id="review-sub">Adjust any amount that looks off — these feed directly into the planner.</p>
+
+        <div class="age-row">
+          <span class="age-label">Your current age</span>
+          <input type="number" class="age-input" id="age-input" min="18" max="80" value="38">
+          <span class="age-hint">Used for projections</span>
+        </div>
+
+        <div class="review-rows" id="review-rows"></div>
+
+        <div class="review-footer">
+          <div>
+            <div class="review-nw-label">Net worth</div>
+            <div class="review-nw-val" id="review-nw">$0</div>
+          </div>
+          <button class="confirm-btn" id="confirm-btn">These look right →</button>
+        </div>
       </div>
     </div>
 
     <!-- Stage: ready -->
-    <div id="stage-ready">
-      <div class="ready-check">✓</div>
-      <h2 class="ready-title" id="ready-title">Demo mode is on</h2>
-      <p class="ready-sub" id="ready-sub">You're exploring the Rivera household — a fictional family. None of this touches your real accounts.</p>
-      <div class="stat-strip">
-        <div class="stat-cell">
-          <div class="stat-val">6</div>
-          <div class="stat-label">Accounts</div>
+    <div id="stage-ready" class="stage">
+      <div style="padding:48px 44px 44px;text-align:center">
+        <div class="ready-check">✓</div>
+        <h2 class="ready-title" id="ready-title">Demo mode is on</h2>
+        <p class="ready-sub" id="ready-sub"></p>
+        <div class="stat-strip">
+          <div class="stat-cell"><div class="stat-val" id="ready-accounts">6</div><div class="stat-label">Accounts</div></div>
+          <div class="stat-cell"><div class="stat-val" id="ready-nw">$612k</div><div class="stat-label">Net worth</div></div>
+          <div class="stat-cell"><div class="stat-val sage">Ready</div><div class="stat-label">To plan</div></div>
         </div>
-        <div class="stat-cell">
-          <div class="stat-val">$612k</div>
-          <div class="stat-label">Net worth</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-val sage">Ready</div>
-          <div class="stat-label">To plan</div>
-        </div>
+        <button class="open-btn" id="open-planner-btn">Open the planner →</button>
+        <span class="reset-link" id="reset-link">Use a different source</span>
       </div>
-      <button class="open-btn" id="open-planner-btn">Open the planner →</button>
-      <span class="reset-link" id="reset-link">Use a different source</span>
     </div>
+
   </div>
 </div>
 
@@ -537,7 +498,6 @@
 <div id="screen-lab" class="screen">
   <div class="card lab-card">
 
-    <!-- Header -->
     <div class="lab-header">
       <div class="lab-header-left">
         <div class="avatars">
@@ -545,69 +505,33 @@
           <div class="avatar avatar-j">J</div>
         </div>
         <div>
-          <div class="household-name">The Rivera household</div>
+          <div class="household-name" id="lab-household-name">The Rivera household</div>
           <div class="household-sub">Planner in a box · retirement plan</div>
         </div>
       </div>
-      <div class="source-badge" id="source-badge">QUICKEN SIMPLIFI · 6 ACCOUNTS</div>
+      <div class="source-badge" id="source-badge">DEMO DATA · 6 ACCOUNTS</div>
     </div>
 
-    <!-- Body -->
     <div class="lab-body">
-
-      <!-- Accounts panel -->
       <div class="accounts-panel">
         <div class="eyebrow">Your accounts today</div>
         <div class="accounts-caption">The starting point every model runs from.</div>
-        <div class="account-rows">
-          <div class="account-row">
-            <div class="account-row-main"><span>Cash &amp; savings</span><span>$104,200</span></div>
-            <div class="account-row-sub">Checking · HYSA</div>
-          </div>
-          <div class="account-row">
-            <div class="account-row-main"><span>Investments</span><span>$402,800</span></div>
-            <div class="account-row-sub">Joint brokerage</div>
-          </div>
-          <div class="account-row">
-            <div class="account-row-main"><span>Retirement</span><span>$214,000</span></div>
-            <div class="account-row-sub">401(k) · Roth IRA</div>
-          </div>
-          <div class="account-row">
-            <div class="account-row-main"><span>Home equity</span><span>$310,000</span></div>
-          </div>
-          <div class="account-row">
-            <div class="account-row-main caution"><span>Mortgage &amp; debt</span><span>−$418,600</span></div>
-          </div>
-        </div>
+        <div class="account-rows" id="lab-account-rows"></div>
         <div class="net-worth-footer">
           <div class="net-worth-label">Net worth today</div>
-          <div class="net-worth-val">$612,400</div>
+          <div class="net-worth-val" id="lab-nw"></div>
         </div>
       </div>
 
-      <!-- Model panel -->
       <div class="model-panel">
         <div class="eyebrow" style="margin-bottom:12px">Run a planning model</div>
         <div class="model-grid">
-          <div class="model-card active" data-model="4pct">
-            <div class="model-card-name">4% Rule</div>
-            <div class="model-card-desc">Bengen safe-withdrawal</div>
-          </div>
-          <div class="model-card" data-model="25x">
-            <div class="model-card-name">25× Number</div>
-            <div class="model-card-desc">Financial-independence target</div>
-          </div>
-          <div class="model-card" data-model="guard">
-            <div class="model-card-name">Guardrails</div>
-            <div class="model-card-desc">Guyton-Klinger dynamic</div>
-          </div>
-          <div class="model-card" data-model="mc">
-            <div class="model-card-name">Monte Carlo</div>
-            <div class="model-card-desc">1,000 market paths</div>
-          </div>
+          <div class="model-card active" data-model="4pct"><div class="model-card-name">4% Rule</div><div class="model-card-desc">Bengen safe-withdrawal</div></div>
+          <div class="model-card" data-model="25x"><div class="model-card-name">25× Number</div><div class="model-card-desc">Financial-independence target</div></div>
+          <div class="model-card" data-model="guard"><div class="model-card-name">Guardrails</div><div class="model-card-desc">Guyton-Klinger dynamic</div></div>
+          <div class="model-card" data-model="mc"><div class="model-card-name">Monte Carlo</div><div class="model-card-desc">1,000 market paths</div></div>
         </div>
 
-        <!-- Result headline -->
         <div class="result-row">
           <div class="result-left">
             <div class="m-label" id="m-label">Safe annual income</div>
@@ -620,7 +544,6 @@
           </div>
         </div>
 
-        <!-- Chart -->
         <svg class="chart-svg" viewBox="0 0 1020 270" id="chart-svg" preserveAspectRatio="none">
           <line x1="64" y1="250" x2="956" y2="250" stroke="rgba(33,31,26,.12)" stroke-width="1"/>
           <line x1="64" y1="142" x2="956" y2="142" stroke="rgba(33,31,26,.05)" stroke-width="1"/>
@@ -632,12 +555,10 @@
           <circle id="retire-dot" cx="500" cy="150" r="5" fill="#211f1a"/>
         </svg>
         <div class="x-axis">
-          <span class="today">Today · 38</span>
+          <span class="today" id="x-today">Today · 38</span>
           <span>your retirement</span>
           <span>age 95</span>
         </div>
-
-        <!-- Legend -->
         <div class="legend" id="legend-det">
           <span class="legend-item"><span class="legend-solid"></span>This scenario</span>
           <span class="legend-item"><span class="legend-dashed"></span>Baseline plan</span>
@@ -647,39 +568,25 @@
           <span class="legend-item"><span class="legend-solid"></span>Median path</span>
         </div>
 
-        <!-- Sliders -->
         <div class="sliders-grid">
-          <div class="slider-row">
-            <div class="slider-header">
-              <span class="slider-label">Retire at age</span>
-              <span class="slider-val" id="val-retire">65</span>
-            </div>
-            <input type="range" id="sl-retire" min="55" max="70" step="1" value="65">
+          <div>
+            <div class="slider-header"><span class="slider-label">Retire at age</span><span class="slider-val" id="val-retire">65</span></div>
+            <input type="range" id="sl-retire" min="55" max="75" step="1" value="65">
           </div>
-          <div class="slider-row">
-            <div class="slider-header">
-              <span class="slider-label">Saved together / month</span>
-              <span class="slider-val" id="val-monthly">$4,300</span>
-            </div>
+          <div>
+            <div class="slider-header"><span class="slider-label">Saved together / month</span><span class="slider-val" id="val-monthly">$4,300</span></div>
             <input type="range" id="sl-monthly" min="1500" max="8000" step="100" value="4300">
           </div>
-          <div class="slider-row">
-            <div class="slider-header">
-              <span class="slider-label">Expected return</span>
-              <span class="slider-val" id="val-ret">6.0%</span>
-            </div>
+          <div>
+            <div class="slider-header"><span class="slider-label">Expected return</span><span class="slider-val" id="val-ret">6.0%</span></div>
             <input type="range" id="sl-ret" min="3" max="9" step="0.5" value="6">
           </div>
-          <div class="slider-row">
-            <div class="slider-header">
-              <span class="slider-label">Spending in retirement</span>
-              <span class="slider-val" id="val-spend">$11,000/mo</span>
-            </div>
+          <div>
+            <div class="slider-header"><span class="slider-label">Spending in retirement</span><span class="slider-val" id="val-spend">$11,000/mo</span></div>
             <input type="range" id="sl-spend" min="60000" max="220000" step="4000" value="132000">
           </div>
         </div>
 
-        <!-- What-ifs -->
         <div class="whatifs">
           <div class="whatifs-label">Life what-ifs</div>
           <div class="pills">
@@ -691,7 +598,6 @@
       </div>
     </div>
 
-    <!-- Risks panel -->
     <div class="risks-panel">
       <div class="risks-header">
         <div class="risks-title">Risks a planner would flag</div>
@@ -706,57 +612,182 @@
 <button class="back-btn" id="back-btn">← Connect screen</button>
 
 <script>
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+const DEMO_ACCOUNTS = {
+  cash:        { label: 'Cash & savings',   sub: 'Checking · HYSA',      value:  104200 },
+  investments: { label: 'Investments',      sub: 'Joint brokerage',       value:  402800 },
+  retirement:  { label: 'Retirement',       sub: '401(k) · Roth IRA',     value:  214000 },
+  homeEquity:  { label: 'Home equity',      sub: '',                      value:  310000 },
+  debt:        { label: 'Mortgage & debt',  sub: '',                      value: -418600 },
+};
+
 const state = {
+  // planner inputs
   retireAge: 65, monthly: 4300, ret: 6, spend: 132000,
   house: false, college: false, yearoff: false,
   model: '4pct',
-  connStage: 'choose', connSource: null, demoMode: false
+  // connection
+  connSource: null, demoMode: false,
+  // user data (real or demo)
+  userAge: 38,
+  accountData: null,   // filled on confirm; null = use demo
+  csvAccountMap: null, // intermediate CSV parse result
 };
 
-// ═══════════════════════════════════════════════════════
+function netWorth() {
+  const data = state.demoMode ? DEMO_ACCOUNTS : (state.accountData || DEMO_ACCOUNTS);
+  return Object.values(data).reduce((s, a) => s + a.value, 0);
+}
+
+// ═══════════════════════════════════════════════════════════
 // PROVIDERS
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 const PROVIDERS = [
-  { key:'simplifi', name:'Quicken Simplifi', initial:'S', bg:'#5a7fb0' },
-  { key:'monarch',  name:'Monarch Money',    initial:'M', bg:'#3f6b5a' },
-  { key:'empower',  name:'Empower',          initial:'E', bg:'#1f6b8a' },
-  { key:'copilot',  name:'Copilot Money',    initial:'C', bg:'#6a5aa0' },
-  { key:'ynab',     name:'YNAB',             initial:'Y', bg:'#3a7fb8' },
-  { key:'plaid',    name:'Connect a bank',   initial:'B', bg:'#3a3733' },
-  { key:'manual',   name:'Manual / CSV',     initial:'+', bg:'#8a7a4a' },
+  { key:'simplifi', name:'Quicken Simplifi', initial:'S', bg:'#5a7fb0', active:true  },
+  { key:'monarch',  name:'Monarch Money',    initial:'M', bg:'#3f6b5a', active:false },
+  { key:'empower',  name:'Empower',          initial:'E', bg:'#1f6b8a', active:false },
+  { key:'copilot',  name:'Copilot Money',    initial:'C', bg:'#6a5aa0', active:false },
+  { key:'ynab',     name:'YNAB',             initial:'Y', bg:'#3a7fb8', active:false },
+  { key:'plaid',    name:'Connect a bank',   initial:'B', bg:'#3a3733', active:false },
+  { key:'manual',   name:'Manual / CSV',     initial:'+', bg:'#8a7a4a', active:true  },
 ];
 const PROV_MAP = Object.fromEntries(PROVIDERS.map(p => [p.key, p]));
 
-// ═══════════════════════════════════════════════════════
-// ENGINE
-// ═══════════════════════════════════════════════════════
+const EXPORT_STEPS = {
+  simplifi: {
+    headline: 'Connect Quicken Simplifi',
+    sub: 'Export your transactions — we\'ll read your account balances from the data.',
+    steps: [
+      'Open Simplifi and click your profile / Settings',
+      'Find "Export Data" and choose "Transactions"',
+      'Set the date range to "All Time" for the most complete picture',
+      'Download the CSV and upload it below',
+    ]
+  },
+  manual: {
+    headline: 'Import from CSV',
+    sub: 'Export transactions from any finance app and upload the CSV — we\'ll group them by account.',
+    steps: [
+      'Open your finance app (Mint, YNAB, Monarch, Personal Capital, etc.)',
+      'Look for "Export" or "Download" in Settings or Transactions',
+      'Download as CSV format',
+      'Upload it below — we\'ll read the Account and Amount columns',
+    ]
+  },
+};
+
+function getExportInfo(key) {
+  return EXPORT_STEPS[key] || EXPORT_STEPS.manual;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CSV PARSING
+// ═══════════════════════════════════════════════════════════
+function parseCSVLine(line) {
+  const result = []; let current = ''; let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
+      else inQuotes = !inQuotes;
+    } else if (ch === ',' && !inQuotes) { result.push(current); current = ''; }
+    else current += ch;
+  }
+  result.push(current);
+  return result.map(s => s.replace(/^"|"$/g, '').trim());
+}
+
+function parseCSV(text) {
+  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim().split('\n');
+  if (lines.length < 2) return { error: 'File is too short — needs a header row and at least one transaction.' };
+
+  const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase());
+
+  // Find key columns
+  const amtIdx  = headers.findIndex(h => h === 'amount' || h.includes('amount') || h === 'amt');
+  const accIdx  = headers.findIndex(h => h === 'account' || h === 'account name' || h.includes('account'));
+  const typeIdx = headers.findIndex(h => h === 'account type' || h === 'type' || h.includes('account type'));
+
+  if (accIdx === -1) return { error: 'Couldn\'t find an "Account" column. Make sure you exported transactions (not a summary).' };
+  if (amtIdx === -1) return { error: 'Couldn\'t find an "Amount" column in this file.' };
+
+  const accountMap = {};
+  let txCount = 0;
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    const cols = parseCSVLine(line);
+    const account = cols[accIdx] || '';
+    const rawAmt  = cols[amtIdx] || '0';
+    const type    = typeIdx >= 0 ? (cols[typeIdx] || '') : '';
+    if (!account) continue;
+
+    // Parse amount: handles $, commas, parentheses for negatives
+    const amount = parseFloat(rawAmt.replace(/[$,\s]/g, '').replace(/^\((.+)\)$/, '-$1')) || 0;
+
+    if (!accountMap[account]) accountMap[account] = { name: account, type, sum: 0, count: 0 };
+    accountMap[account].sum += amount;
+    accountMap[account].count++;
+    txCount++;
+  }
+
+  if (Object.keys(accountMap).length === 0) return { error: 'No accounts found — check that rows have account names.' };
+  return { accounts: Object.values(accountMap), txCount };
+}
+
+function categorizeAccount(name, type) {
+  const t = (name + ' ' + type).toLowerCase();
+  if (/401[( ]?k|403[( ]?b|457|sep.?ira|simple.?ira|\bira\b|roth|retirement|pension/.test(t)) return 'retirement';
+  if (/brokerage|invest|taxable|stock|etf|mutual.?fund|securities|portfolio/.test(t)) return 'investments';
+  if (/mortgage|home.?loan|heloc|home.?equity.?line/.test(t)) return 'debt';
+  if (/credit.?card|credit|auto.?loan|student.?loan|personal.?loan|line.?of.?credit/.test(t)) return 'debt';
+  if (/home.?equity|property|real.?estate/.test(t)) return 'homeEquity';
+  return 'cash'; // checking, savings, HYSA, HSA, etc.
+}
+
+const CATEGORIES = [
+  { key: 'cash',        label: 'Cash & savings',  isDebt: false },
+  { key: 'investments', label: 'Investments',      isDebt: false },
+  { key: 'retirement',  label: 'Retirement',       isDebt: false },
+  { key: 'homeEquity',  label: 'Home equity',      isDebt: false },
+  { key: 'debt',        label: 'Mortgage & debt',  isDebt: true  },
+];
+
+// ═══════════════════════════════════════════════════════════
+// SIMULATION ENGINE
+// ═══════════════════════════════════════════════════════════
 function fmt(n) {
   if (n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
   if (n >= 1e3) return '$' + Math.round(n/1e3) + 'k';
   return '$' + Math.round(n);
 }
 
-function proj(p) {
-  const NW0=612400, startAge=38, endAge=95, mr=p.ret/100/12;
-  let bal=NW0; const arr=[NW0]; let atRetire=null, lasts=null;
-  const months=(endAge-startAge)*12;
-  const retireM=Math.round((p.retireAge-startAge)*12);
-  for(let m=1; m<=months; m++){
-    const age=startAge+m/12, retired=age>p.retireAge;
-    bal*=(1+mr);
-    if(!retired){ let c=p.monthly; if(p.yearoff && age>=43 && age<44) c=0; bal+=c; }
-    else bal-=p.spend/12;
-    if(m===36 && p.house) bal-=120000;
-    if(p.yearoff && m===60) bal-=50000;
-    if(p.college && (m===132||m===144||m===156||m===168)) bal-=30000;
-    if(bal<0){ bal=0; if(lasts===null && retired) lasts=Math.round(age); }
-    if(m===retireM) atRetire=bal;
-    if(m%12===0) arr.push(bal);
+function fmtComma(n) {
+  return Math.round(Math.abs(n)).toLocaleString();
+}
+
+function proj(p, nw0, startAge) {
+  nw0 = nw0 ?? 612400; startAge = startAge ?? 38;
+  const endAge = 95, mr = p.ret/100/12;
+  let bal = nw0; const arr = [nw0]; let atRetire = null, lasts = null;
+  const months = (endAge - startAge) * 12;
+  const retireM = Math.round((p.retireAge - startAge) * 12);
+  for (let m = 1; m <= months; m++) {
+    const age = startAge + m/12, retired = age > p.retireAge;
+    bal *= (1 + mr);
+    if (!retired) { let c = p.monthly; if (p.yearoff && age >= 43 && age < 44) c = 0; bal += c; }
+    else bal -= p.spend / 12;
+    if (m === 36 && p.house) bal -= 120000;
+    if (p.yearoff && m === 60) bal -= 50000;
+    if (p.college && (m===132||m===144||m===156||m===168)) bal -= 30000;
+    if (bal < 0) { bal = 0; if (lasts === null && retired) lasts = Math.round(age); }
+    if (m === retireM) atRetire = bal;
+    if (m % 12 === 0) arr.push(bal);
   }
-  return { arr, atRetire: atRetire==null?bal:atRetire, lasts, endVal: arr[arr.length-1] };
+  return { arr, atRetire: atRetire ?? bal, lasts, endVal: arr[arr.length-1] };
 }
 
 function makePath(arr, yMax) {
@@ -766,162 +797,164 @@ function makePath(arr, yMax) {
   return { line, area: line+' L'+x1+','+y1+' L'+x0+','+y1+' Z', pts };
 }
 
-// Monte Carlo – seeded PRNG for deterministic results
-function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
-function gauss(rng){ let u=0,v=0; while(u===0)u=rng(); while(v===0)v=rng(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+function mulberry32(a) { return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function gauss(rng) { let u=0,v=0; while(!u)u=rng(); while(!v)v=rng(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
 
-function mc(p) {
-  const startAge=38, endAge=95, mean=p.ret/100, vol=0.12, infl=0.025, trials=1000;
+function mc(p, nw0, startAge) {
+  nw0 = nw0 ?? 612400; startAge = startAge ?? 38;
+  const endAge=95, mean=p.ret/100, vol=0.12, infl=0.025, trials=1000;
   const years=endAge-startAge, retY=p.retireAge-startAge;
   const rng=mulberry32(987654321);
   const cols=Array.from({length:years+1},()=>[]);
   let success=0;
-  for(let t=0; t<trials; t++){
-    let bal=612400, ok=true; cols[0].push(bal);
-    for(let y=1; y<=years; y++){
-      bal*=(1+mean+vol*gauss(rng));
-      if(y<=retY){ let c=p.monthly*12; if(p.yearoff && y===5) c=0; bal+=c; }
-      else { bal-=p.spend*Math.pow(1+infl,y-retY); }
-      if(p.house && y===3) bal-=120000;
-      if(p.yearoff && y===5) bal-=50000;
-      if(p.college && (y===11||y===12||y===13||y===14)) bal-=30000;
-      if(bal<=0){ bal=0; if(y>retY) ok=false; }
+  for (let t=0; t<trials; t++) {
+    let bal=nw0, ok=true; cols[0].push(bal);
+    for (let y=1; y<=years; y++) {
+      bal *= (1+mean+vol*gauss(rng));
+      if (y<=retY) { let c=p.monthly*12; if(p.yearoff&&y===5)c=0; bal+=c; }
+      else bal -= p.spend*Math.pow(1+infl,y-retY);
+      if (p.house&&y===3) bal-=120000;
+      if (p.yearoff&&y===5) bal-=50000;
+      if (p.college&&(y===11||y===12||y===13||y===14)) bal-=30000;
+      if (bal<=0) { bal=0; if(y>retY)ok=false; }
       cols[y].push(bal);
     }
-    if(ok) success++;
+    if (ok) success++;
   }
   const pct=(arr,q)=>{ const a=arr.slice().sort((x,y)=>x-y); return a[Math.floor(q*(a.length-1))]; };
-  return { p10:cols.map(c=>pct(c,0.1)), p50:cols.map(c=>pct(c,0.5)), p90:cols.map(c=>pct(c,0.9)), success:success/trials };
+  return { p10:cols.map(c=>pct(c,.1)), p50:cols.map(c=>pct(c,.5)), p90:cols.map(c=>pct(c,.9)), success:success/trials };
 }
 
 function modelResult(s, atRetire, cur, mcData) {
   const f=fmt;
-  if(s.model==='4pct'){
+  if (s.model==='4pct') {
     const safe=0.04*atRetire, fits=s.spend<=safe;
-    return {
-      mLabel:'Safe annual income', mBig:f(safe), mSub:f(safe/12)+'/mo, rising with inflation',
-      mNote: fits ? ('Your '+f(s.spend)+'/yr target fits with '+f(safe-s.spend)+'/yr to spare.')
-                  : ('Your '+f(s.spend)+'/yr target is '+f(s.spend-safe)+' over the safe draw — trim spending or work longer.'),
-      mNoteColor: fits?'#5e7a52':'#9a5a4a',
-      mFine:'Bengen 4% rule · Trinity Study · 30-yr horizon'
-    };
+    return { mLabel:'Safe annual income', mBig:f(safe), mSub:f(safe/12)+'/mo, rising with inflation',
+      mNote: fits?('Your '+f(s.spend)+'/yr target fits with '+f(safe-s.spend)+'/yr to spare.')
+                 :('Your '+f(s.spend)+'/yr target is '+f(s.spend-safe)+' over the safe draw — trim spending or work longer.'),
+      mNoteColor:fits?'#5e7a52':'#9a5a4a', mFine:'Bengen 4% rule · Trinity Study · 30-yr horizon' };
   }
-  if(s.model==='25x'){
+  if (s.model==='25x') {
     const target=25*s.spend; let ageHit=null;
-    cur.arr.forEach((v,i)=>{ if(ageHit===null && v>=target) ageHit=38+i; });
+    cur.arr.forEach((v,i)=>{ if(ageHit===null&&v>=target)ageHit=38+i; });
     const surplus=atRetire-target;
-    return {
-      mLabel:'Your financial-independence number', mBig:f(target),
-      mSub: ageHit ? ('reached around age '+ageHit) : 'not reached by 95 at this pace',
-      mNote: surplus>=0 ? ('At retirement you\'re '+f(surplus)+' above your 25× number.') : (f(-surplus)+' short of your 25× number at retirement.'),
-      mNoteColor: surplus>=0?'#5e7a52':'#9a5a4a',
-      mFine:'25× rule · the inverse of a 4% withdrawal'
-    };
+    return { mLabel:'Your financial-independence number', mBig:f(target),
+      mSub:ageHit?('reached around age '+ageHit):'not reached by 95 at this pace',
+      mNote:surplus>=0?('At retirement you\'re '+f(surplus)+' above your 25× number.'):(f(-surplus)+' short of your 25× number at retirement.'),
+      mNoteColor:surplus>=0?'#5e7a52':'#9a5a4a', mFine:'25× rule · the inverse of a 4% withdrawal' };
   }
-  if(s.model==='guard'){
+  if (s.model==='guard') {
     const hi=0.054*atRetire, lo=0.04*atRetire;
-    return {
-      mLabel:'Flexible spending range', mBig:f(hi/12)+'–'+f(lo/12)+'/mo', mSub:'start near '+f(hi/12)+'/mo',
+    return { mLabel:'Flexible spending range', mBig:f(hi/12)+'–'+f(lo/12)+'/mo', mSub:'start near '+f(hi/12)+'/mo',
       mNote:'Guardrails let you start higher, then cut ~10% after a poor year and raise after a strong one — historically lifts success toward ~95%.',
-      mNoteColor:'#5e7a52',
-      mFine:'Guyton-Klinger guardrails · dynamic withdrawal'
-    };
+      mNoteColor:'#5e7a52', mFine:'Guyton-Klinger guardrails · dynamic withdrawal' };
   }
-  const rate=mcData ? Math.round(mcData.success*100) : 0;
-  return {
-    mLabel:'Chance the plan lasts to 95', mBig:rate+'%', mSub:'across 1,000 simulated markets',
-    mNote: rate>=85 ? ('Strong — spending held up in '+rate+'% of markets, including poor early returns.')
-         : rate>=70 ? ('Workable, but '+(100-rate)+'% of paths ran short. Guardrails or a later start would help.')
-         : ('Fragile — '+(100-rate)+'% of paths ran out. Trim spending, save more, or delay retirement.'),
-    mNoteColor: rate>=85?'#5e7a52':rate>=70?'#7a6a4a':'#9a5a4a',
-    mFine:'Monte Carlo · 12% volatility · 2.5% inflation'
-  };
+  const rate=mcData?Math.round(mcData.success*100):0;
+  return { mLabel:'Chance the plan lasts to 95', mBig:rate+'%', mSub:'across 1,000 simulated markets',
+    mNote:rate>=85?('Strong — spending held up in '+rate+'% of markets, including poor early returns.')
+        :rate>=70?('Workable, but '+(100-rate)+'% of paths ran short. Guardrails or a later start would help.')
+        :('Fragile — '+(100-rate)+'% of paths ran out. Trim spending, save more, or delay retirement.'),
+    mNoteColor:rate>=85?'#5e7a52':rate>=70?'#7a6a4a':'#9a5a4a',
+    mFine:'Monte Carlo · 12% volatility · 2.5% inflation' };
 }
 
 function computeRisks(s, atRetire) {
   const out=[];
-  const wr=atRetire>0 ? s.spend/atRetire : 1;
-  if(wr>0.04) out.push({t:'Withdrawal rate above 4%', b:'You\'re drawing '+(wr*100).toFixed(1)+'% at retirement. Sustained rates over ~4% sharply raise the odds of running short.', sev:'high'});
-  if(s.retireAge<65) out.push({t:'Health coverage before Medicare', b:'Retiring at '+s.retireAge+' leaves '+(65-s.retireAge)+' yr'+(65-s.retireAge>1?'s':'')+' before Medicare — budget roughly $1.5k/mo for private coverage.', sev:'high'});
-  if(s.retireAge<62) out.push({t:'Sequence-of-returns risk', b:'A downturn in your first few retirement years does outsized damage. Retiring early amplifies it.', sev:'med'});
-  if(s.ret>7) out.push({t:'Optimistic return assumption', b:'You\'re modeling '+s.ret.toFixed(1)+'%. Most planners use 5–6% to stay conservative on long horizons.', sev:'med'});
-  if(s.spend>150000) out.push({t:'High spending baseline', b:'A '+fmt(s.spend)+'/yr lifestyle demands a large nest egg — small trims compound enormously.', sev:'med'});
-  out.push({t:'Inflation drift', b:'This plan assumes ~2.5% inflation. Healthcare and housing have historically outpaced that.', sev:'low'});
-  out.push({t:'Social Security not modeled', b:'Benefits could add ~$45k/yr combined. Excluding them, your projection likely understates real income.', sev:'low'});
-  out.push({t:'Longevity', b:'A healthy 38-yr-old couple has a ~50% chance one of you reaches 90. Planning only to then is tight.', sev:'low'});
+  const wr=atRetire>0?s.spend/atRetire:1;
+  if (wr>0.04) out.push({t:'Withdrawal rate above 4%',b:'You\'re drawing '+(wr*100).toFixed(1)+'% at retirement. Sustained rates over ~4% sharply raise the odds of running short.',sev:'high'});
+  if (s.retireAge<65) out.push({t:'Health coverage before Medicare',b:'Retiring at '+s.retireAge+' leaves '+(65-s.retireAge)+' yr'+(65-s.retireAge>1?'s':'')+' before Medicare — budget roughly $1.5k/mo for private coverage.',sev:'high'});
+  if (s.retireAge<62) out.push({t:'Sequence-of-returns risk',b:'A downturn in your first few retirement years does outsized damage. Retiring early amplifies it.',sev:'med'});
+  if (s.ret>7) out.push({t:'Optimistic return assumption',b:'You\'re modeling '+s.ret.toFixed(1)+'%. Most planners use 5–6% to stay conservative on long horizons.',sev:'med'});
+  if (s.spend>150000) out.push({t:'High spending baseline',b:'A '+fmt(s.spend)+'/yr lifestyle demands a large nest egg — small trims compound enormously.',sev:'med'});
+  out.push({t:'Inflation drift',b:'This plan assumes ~2.5% inflation. Healthcare and housing have historically outpaced that.',sev:'low'});
+  out.push({t:'Social Security not modeled',b:'Benefits could add ~$45k/yr combined. Excluding them, your projection likely understates real income.',sev:'low'});
+  out.push({t:'Longevity',b:'A healthy couple at your age has a ~50% chance one of you reaches 90. Planning only to then is tight.',sev:'low'});
   return out.slice(0,4);
 }
 
-// ═══════════════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// LAB RENDER
+// ═══════════════════════════════════════════════════════════
 function render() {
   const s = state;
   const isMc = s.model === 'mc';
-  const cur = proj(s);
-  const base = proj({ retireAge:65, monthly:4300, ret:6, spend:132000, house:false, college:false, yearoff:false });
-  const mcData = isMc ? mc(s) : null;
+  const nw0 = netWorth();
+  const age = s.userAge || 38;
+  const accts = s.demoMode ? DEMO_ACCOUNTS : (s.accountData || DEMO_ACCOUNTS);
 
-  // Chart paths
-  const yMax = isMc
-    ? Math.max(...(mcData.p90), cur.atRetire)*1.06
-    : Math.max(...cur.arr, ...base.arr)*1.08;
-  const c = makePath(cur.arr, yMax);
-  const b = makePath(base.arr, yMax);
-  const retireX = (64 + (956-64)*((s.retireAge-38)/(95-38))).toFixed(1);
-  const retireY = (250 - (250-34)*(cur.atRetire/yMax)).toFixed(1);
+  const cur  = proj(s, nw0, age);
+  const base = proj({ retireAge:65, monthly:4300, ret:6, spend:132000, house:false, college:false, yearoff:false }, nw0, age);
+  const mcData = isMc ? mc(s, nw0, age) : null;
 
-  // Chart elements
-  if(isMc){
-    const p10 = makePath(mcData.p10, yMax);
-    const p50 = makePath(mcData.p50, yMax);
-    const p90 = makePath(mcData.p90, yMax);
-    // Band = p90 forward then p10 reverse
-    const band = 'M'+p90.pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')
+  // Chart
+  const yMax = isMc ? Math.max(...mcData.p90, cur.atRetire)*1.06 : Math.max(...cur.arr, ...base.arr)*1.08;
+  const c = makePath(cur.arr, yMax), b = makePath(base.arr, yMax);
+  const retireX = (64+(956-64)*((s.retireAge-age)/(95-age))).toFixed(1);
+  const retireY = (250-(250-34)*(cur.atRetire/yMax)).toFixed(1);
+
+  if (isMc) {
+    const p10=makePath(mcData.p10,yMax), p50=makePath(mcData.p50,yMax), p90=makePath(mcData.p90,yMax);
+    const band='M'+p90.pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')
       +' L'+p10.pts.slice().reverse().map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')+' Z';
     $('chart-band').setAttribute('d', band);
     $('chart-primary').setAttribute('d', p50.line);
     $('chart-area').setAttribute('d', '');
     $('chart-base').setAttribute('d', '');
     $('legend-det').style.display = 'none';
-    $('legend-mc').style.display = 'flex';
+    $('legend-mc').style.display  = 'flex';
   } else {
     $('chart-band').setAttribute('d', '');
     $('chart-primary').setAttribute('d', c.line);
     $('chart-area').setAttribute('d', c.area);
     $('chart-base').setAttribute('d', b.line);
     $('legend-det').style.display = 'flex';
-    $('legend-mc').style.display = 'none';
+    $('legend-mc').style.display  = 'none';
   }
-  $('retire-line').setAttribute('x1', retireX);
-  $('retire-line').setAttribute('x2', retireX);
-  $('retire-dot').setAttribute('cx', retireX);
-  $('retire-dot').setAttribute('cy', retireY);
+  $('retire-line').setAttribute('x1', retireX); $('retire-line').setAttribute('x2', retireX);
+  $('retire-dot').setAttribute('cx', retireX);  $('retire-dot').setAttribute('cy', retireY);
+  $('x-today').textContent = 'Today · ' + age;
 
   // Model result
   const m = modelResult(s, cur.atRetire, cur, mcData);
-  $('m-label').textContent = m.mLabel;
-  $('m-big').textContent = m.mBig;
-  $('m-sub').textContent = m.mSub;
-  $('m-note').textContent = m.mNote;
-  $('m-note').style.color = m.mNoteColor;
-  $('m-fine').textContent = m.mFine;
+  $('m-label').textContent = m.mLabel; $('m-big').textContent = m.mBig; $('m-sub').textContent = m.mSub;
+  $('m-note').textContent = m.mNote; $('m-note').style.color = m.mNoteColor; $('m-fine').textContent = m.mFine;
 
-  // Slider display values
-  $('val-retire').textContent = s.retireAge;
+  // Sliders
+  $('val-retire').textContent  = s.retireAge;
   $('val-monthly').textContent = '$' + s.monthly.toLocaleString();
-  $('val-ret').textContent = s.ret.toFixed(1) + '%';
-  $('val-spend').textContent = '$' + Math.round(s.spend/12).toLocaleString() + '/mo';
+  $('val-ret').textContent     = s.ret.toFixed(1) + '%';
+  $('val-spend').textContent   = '$' + Math.round(s.spend/12).toLocaleString() + '/mo';
 
-  // Model card active state
-  document.querySelectorAll('.model-card').forEach(el => {
-    el.classList.toggle('active', el.dataset.model === s.model);
-  });
-
-  // What-if pills
+  document.querySelectorAll('.model-card').forEach(el => el.classList.toggle('active', el.dataset.model === s.model));
   $('pill-house').classList.toggle('active', s.house);
   $('pill-college').classList.toggle('active', s.college);
   $('pill-yearoff').classList.toggle('active', s.yearoff);
+
+  // Accounts panel
+  const rows = [
+    { label: accts.cash.label,        sub: accts.cash.sub,        val: accts.cash.value,        isDebt: false },
+    { label: accts.investments.label, sub: accts.investments.sub, val: accts.investments.value, isDebt: false },
+    { label: accts.retirement.label,  sub: accts.retirement.sub,  val: accts.retirement.value,  isDebt: false },
+    { label: accts.homeEquity.label,  sub: accts.homeEquity.sub,  val: accts.homeEquity.value,  isDebt: false },
+    { label: accts.debt.label,        sub: accts.debt.sub,        val: accts.debt.value,        isDebt: true  },
+  ];
+  $('lab-account-rows').innerHTML = rows.map(r => `
+    <div class="account-row">
+      <div class="account-row-main${r.isDebt?' caution':''}">
+        <span>${r.label}</span>
+        <span>${r.isDebt?'−':''}$${Math.round(Math.abs(r.val)/1000)*1000 >= 1000 ? fmtMoney(Math.abs(r.val)) : Math.round(Math.abs(r.val)).toLocaleString()}</span>
+      </div>
+      ${r.sub ? `<div class="account-row-sub">${r.sub}</div>` : ''}
+    </div>
+  `).join('');
+  $('lab-nw').textContent = fmtMoney(nw0);
+
+  // Source badge
+  const src = s.demoMode ? 'DEMO DATA'
+    : (s.connSource && PROV_MAP[s.connSource] ? PROV_MAP[s.connSource].name.toUpperCase() : 'YOUR DATA');
+  const acctCount = s.demoMode ? 6 : Object.values(accts).filter(a => a.value !== 0).length;
+  $('source-badge').textContent = src + ' · ' + acctCount + ' ACCOUNTS';
+  $('lab-household-name').textContent = s.demoMode ? 'The Rivera household' : 'Your household';
 
   // Risks
   const sevMap = {
@@ -933,33 +966,45 @@ function render() {
   $('risks-grid').innerHTML = risks.map(r => {
     const sv = sevMap[r.sev];
     return `<div class="risk-card">
-      <div class="risk-top">
-        <span class="risk-dot" style="background:${sv.dot}"></span>
-        <span class="risk-tag" style="color:${sv.tagColor}">${sv.tag}</span>
-      </div>
+      <div class="risk-top"><span class="risk-dot" style="background:${sv.dot}"></span><span class="risk-tag" style="color:${sv.tagColor}">${sv.tag}</span></div>
       <div class="risk-title">${r.t}</div>
       <div class="risk-body">${r.b}</div>
     </div>`;
   }).join('');
-
-  // Source badge
-  const sourceLabel = s.demoMode ? 'DEMO DATA'
-    : (s.connSource && PROV_MAP[s.connSource] ? PROV_MAP[s.connSource].name.toUpperCase() : 'QUICKEN SIMPLIFI');
-  $('source-badge').textContent = sourceLabel + ' · 6 ACCOUNTS';
 }
 
-// ═══════════════════════════════════════════════════════
-// CONNECT SCREEN LOGIC
-// ═══════════════════════════════════════════════════════
+function fmtMoney(n) {
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(2).replace(/\.?0+$/, '') + 'M';
+  return '$' + Math.round(n).toLocaleString();
+}
+
+// ═══════════════════════════════════════════════════════════
+// STAGE MANAGEMENT
+// ═══════════════════════════════════════════════════════════
+function showStage(id) {
+  document.querySelectorAll('.stage').forEach(s => { s.style.display='none'; s.classList.remove('active'); });
+  const el = $(id);
+  if (el) { el.style.display = 'block'; el.classList.add('active'); }
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+  $('back-btn').style.display = id === 'screen-lab' ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+// CONNECT FLOW
+// ═══════════════════════════════════════════════════════════
 function renderProviders() {
-  const grid = $('provider-grid');
-  grid.innerHTML = PROVIDERS.map(p => `
-    <div class="provider-tile${state.connSource===p.key?' selected':''}" data-key="${p.key}">
+  $('provider-grid').innerHTML = PROVIDERS.map(p => `
+    <div class="provider-tile${!p.active?' disabled':''}${state.connSource===p.key?' selected':''}" data-key="${p.key}" ${p.active?'':'tabindex="-1"'}>
       <div class="provider-dot" style="background:${p.bg}">${p.initial}</div>
       <div class="provider-name">${p.name}</div>
+      ${!p.active ? '<span class="provider-soon">Soon</span>' : ''}
     </div>
   `).join('');
-  grid.querySelectorAll('.provider-tile').forEach(tile => {
+  $('provider-grid').querySelectorAll('.provider-tile:not(.disabled)').forEach(tile => {
     tile.addEventListener('click', () => {
       state.connSource = tile.dataset.key;
       renderProviders();
@@ -969,88 +1014,213 @@ function renderProviders() {
 }
 
 function updateConnectBtn() {
-  const btn = $('connect-btn');
-  const has = !!state.connSource;
-  if(has){
-    btn.className = 'connect-btn enabled';
-    btn.textContent = 'Securely connect ' + PROV_MAP[state.connSource].name;
-  } else {
-    btn.className = 'connect-btn disabled';
-    btn.textContent = 'Choose a source above';
-  }
+  const btn = $('connect-btn'), has = !!state.connSource;
+  btn.className = 'connect-btn ' + (has ? 'enabled' : 'disabled');
+  btn.textContent = has ? ('Securely connect ' + PROV_MAP[state.connSource].name) : 'Choose a source above';
 }
 
-function goReady(isDemo) {
+function goToUpload() {
+  const info = getExportInfo(state.connSource);
+  const prov = PROV_MAP[state.connSource];
+
+  $('upload-prov-dot').style.background = prov.bg;
+  $('upload-prov-dot').textContent = prov.initial;
+  $('upload-headline').textContent = info.headline;
+  $('upload-sub').textContent = info.sub;
+
+  $('export-steps').innerHTML = '<div class="export-steps-title">How to export your data</div>'
+    + info.steps.map((s,i) => `<div class="export-step"><span class="step-num">${i+1}</span><span>${s}</span></div>`).join('');
+
+  // Reset dropzone
+  $('csv-file-input').value = '';
+  $('dropzone-filename').style.display = 'none';
+  $('dropzone-filename').textContent = '';
+  state.csvAccountMap = null;
+
+  showStage('stage-csv-upload');
+}
+
+function goToReview(csvResult) {
+  // Build account map from CSV or empty
+  const catMap = { cash:[], investments:[], retirement:[], homeEquity:[], debt:[] };
+
+  if (csvResult && csvResult.accounts) {
+    csvResult.accounts.forEach(acct => {
+      const cat = categorizeAccount(acct.name, acct.type);
+      catMap[cat].push(acct);
+    });
+    const totalAccts = csvResult.accounts.length;
+    $('review-sub').textContent = `We found ${totalAccts} account${totalAccts!==1?'s':''} across ${csvResult.txCount.toLocaleString()} transactions. Adjust any balance that looks off.`;
+  } else {
+    $('review-sub').textContent = 'Enter your current balances below — check your finance app for the latest numbers.';
+  }
+
+  state.csvAccountMap = catMap;
+
+  // Render review rows
+  $('review-rows').innerHTML = CATEGORIES.map(cat => {
+    const accts = catMap[cat.key] || [];
+    const sum = accts.reduce((s,a) => s + a.sum, 0);
+    const displayVal = cat.isDebt ? Math.abs(sum) : sum;
+    const txTotal = accts.reduce((s,a) => s + a.count, 0);
+
+    return `<div class="review-row">
+      <div class="review-row-left">
+        <div class="review-row-label${cat.isDebt?' debt-label':''}">${cat.label}</div>
+        <div class="acct-tags">
+          ${accts.length ? accts.map(a=>`<span class="acct-tag">${a.name}</span>`).join('') : '<span class="no-accts">No accounts detected</span>'}
+        </div>
+      </div>
+      <div>
+        <div class="balance-field">
+          <span class="balance-sign${cat.isDebt?' neg':''}">$</span>
+          <input class="balance-input${cat.isDebt?' debt-input':''}" data-cat="${cat.key}" data-isdebt="${cat.isDebt}"
+            value="${displayVal > 0 ? fmtComma(displayVal) : ''}"
+            placeholder="0" inputmode="numeric">
+        </div>
+        ${accts.length && txTotal > 0 ? `<div class="balance-hint">sum of ${txTotal.toLocaleString()} tx — verify in app</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Live net worth update
+  updateReviewNW();
+  $('review-rows').querySelectorAll('.balance-input').forEach(inp => {
+    inp.addEventListener('input', updateReviewNW);
+  });
+
+  showStage('stage-csv-review');
+}
+
+function updateReviewNW() {
+  let nw = 0;
+  $('review-rows').querySelectorAll('.balance-input').forEach(inp => {
+    const raw = parseFloat(inp.value.replace(/,/g,'')) || 0;
+    const isDebt = inp.dataset.isdebt === 'true';
+    nw += isDebt ? -raw : raw;
+  });
+  $('review-nw').textContent = (nw < 0 ? '−' : '') + fmtMoney(Math.abs(nw));
+  $('review-nw').style.color = nw < 0 ? 'var(--caution)' : 'var(--ink)';
+}
+
+function confirmAccounts() {
+  const inputs = $('review-rows').querySelectorAll('.balance-input');
+  const newData = {};
+  CATEGORIES.forEach((cat, i) => {
+    const raw = parseFloat(inputs[i].value.replace(/,/g,'')) || 0;
+    const isDebt = cat.isDebt;
+    const accts = (state.csvAccountMap || {})[cat.key] || [];
+    newData[cat.key] = {
+      label: cat.label,
+      sub: accts.map(a=>a.name).join(' · '),
+      value: isDebt ? -raw : raw,
+    };
+  });
+  state.accountData = newData;
+  state.userAge = parseInt($('age-input').value) || 38;
+  goToReady(false);
+}
+
+function goToReady(isDemo) {
   state.demoMode = isDemo;
-  if(!isDemo) state.connSource = state.connSource;
-  $('stage-choose').style.display = 'none';
-  $('stage-ready').style.display = 'block';
+  const nw = netWorth();
+  const accts = isDemo ? DEMO_ACCOUNTS : (state.accountData || DEMO_ACCOUNTS);
+  const acctCount = isDemo ? 6 : Object.values(accts).filter(a=>a.value!==0).length;
+
   $('ready-title').textContent = isDemo ? 'Demo mode is on'
-    : (PROV_MAP[state.connSource]?.name || 'Source') + ' connected';
+    : (PROV_MAP[state.connSource]?.name || 'Your data') + ' connected';
   $('ready-sub').textContent = isDemo
     ? 'You\'re exploring the Rivera household — a fictional family. None of this touches your real accounts.'
-    : 'Read-only access · 6 accounts found · we never move your money.';
+    : 'Read-only access · ' + acctCount + ' accounts loaded · we never move your money.';
+  $('ready-accounts').textContent = acctCount;
+  $('ready-nw').textContent = fmtMoney(Math.abs(nw));
+
+  showStage('stage-ready');
 }
 
-function goChoose() {
-  state.connStage = 'choose';
-  state.connSource = null;
-  state.demoMode = false;
-  $('stage-ready').style.display = 'none';
-  $('stage-choose').style.display = 'block';
-  renderProviders();
-  updateConnectBtn();
+function goToChoose() {
+  state.connSource = null; state.demoMode = false;
+  state.accountData = null; state.csvAccountMap = null;
+  renderProviders(); updateConnectBtn();
+  showStage('stage-choose');
 }
 
-function showLab() {
-  $('screen-connect').classList.remove('active');
-  $('screen-lab').classList.add('active');
-  $('back-btn').style.display = 'block';
-  render();
+// ═══════════════════════════════════════════════════════════
+// CSV FILE HANDLING
+// ═══════════════════════════════════════════════════════════
+function handleCSVFile(file) {
+  if (!file) return;
+  $('dropzone-filename').textContent = '📄 ' + file.name;
+  $('dropzone-filename').style.display = 'block';
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const result = parseCSV(e.target.result);
+    if (result.error) {
+      alert('Problem reading CSV:\n\n' + result.error + '\n\nTry exporting again or use manual entry.');
+      return;
+    }
+    goToReview(result);
+  };
+  reader.readAsText(file);
 }
 
-function showConnect() {
-  $('screen-lab').classList.remove('active');
-  $('screen-connect').classList.add('active');
-  $('back-btn').style.display = 'none';
-}
+// ═══════════════════════════════════════════════════════════
+// EVENT WIRING
+// ═══════════════════════════════════════════════════════════
+function $(id) { return document.getElementById(id); }
 
-// ═══════════════════════════════════════════════════════
-// EVENTS
-// ═══════════════════════════════════════════════════════
-function $(id){ return document.getElementById(id); }
-
-$('connect-btn').addEventListener('click', () => {
-  if(!state.connSource) return;
-  goReady(false);
+// Choose stage
+$('connect-btn').addEventListener('click', () => { if (state.connSource) goToUpload(); });
+$('demo-btn').addEventListener('click', () => {
+  state.userAge = 38;
+  goToReady(true);
 });
 
-$('demo-btn').addEventListener('click', () => goReady(true));
+// CSV upload stage
+$('back-to-choose').addEventListener('click', () => showStage('stage-choose'));
 
-$('open-planner-btn').addEventListener('click', showLab);
+const dropzone = $('csv-dropzone');
+const fileInput = $('csv-file-input');
+fileInput.addEventListener('change', () => handleCSVFile(fileInput.files[0]));
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault(); dropzone.classList.remove('drag-over');
+  handleCSVFile(e.dataTransfer.files[0]);
+});
+$('skip-to-manual').addEventListener('click', () => goToReview(null));
 
-$('reset-link').addEventListener('click', goChoose);
+// CSV review stage
+$('back-to-upload').addEventListener('click', () => showStage('stage-csv-upload'));
+$('confirm-btn').addEventListener('click', confirmAccounts);
 
-$('back-btn').addEventListener('click', showConnect);
+// Ready stage
+$('open-planner-btn').addEventListener('click', () => {
+  showScreen('screen-lab');
+  render();
+});
+$('reset-link').addEventListener('click', goToChoose);
 
+// Lab
+$('back-btn').addEventListener('click', () => showScreen('screen-connect'));
 document.querySelectorAll('.model-card').forEach(el => {
   el.addEventListener('click', () => { state.model = el.dataset.model; render(); });
 });
-
-$('sl-retire').addEventListener('input', e => { state.retireAge = +e.target.value; render(); });
-$('sl-monthly').addEventListener('input', e => { state.monthly = +e.target.value; render(); });
-$('sl-ret').addEventListener('input', e => { state.ret = +e.target.value; render(); });
-$('sl-spend').addEventListener('input', e => { state.spend = +e.target.value; render(); });
-
-$('pill-house').addEventListener('click', () => { state.house = !state.house; render(); });
+$('sl-retire').addEventListener('input',  e => { state.retireAge = +e.target.value; render(); });
+$('sl-monthly').addEventListener('input', e => { state.monthly   = +e.target.value; render(); });
+$('sl-ret').addEventListener('input',     e => { state.ret       = +e.target.value; render(); });
+$('sl-spend').addEventListener('input',   e => { state.spend     = +e.target.value; render(); });
+$('pill-house').addEventListener('click',   () => { state.house   = !state.house;   render(); });
 $('pill-college').addEventListener('click', () => { state.college = !state.college; render(); });
 $('pill-yearoff').addEventListener('click', () => { state.yearoff = !state.yearoff; render(); });
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 renderProviders();
 updateConnectBtn();
+showStage('stage-choose');
 </script>
 </body>
 </html>
