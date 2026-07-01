@@ -33,254 +33,151 @@
     --card-shadow: 0 1px 2px rgba(33,31,26,.04), 0 14px 40px -22px rgba(33,31,26,.22);
   }
 
-  body {
-    background: var(--bg);
-    font-family: 'Hanken Grotesk', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-  }
+  body { background: var(--bg); font-family: 'Hanken Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; }
 
   .screen { display: none; }
   .screen.active { display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px 80px; min-height: 100vh; }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--hairline);
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-    overflow: hidden;
-  }
+  .card { background: var(--surface); border: 1px solid var(--hairline); border-radius: 16px; box-shadow: var(--card-shadow); overflow: hidden; }
 
-  .eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; font-weight: 500;
-    letter-spacing: .1em; text-transform: uppercase;
-    color: var(--faint);
-  }
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
 
-  /* ── Connect card ── */
+  /* Auth */
+  .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .field-label { font-size: 12.5px; font-weight: 500; color: var(--muted); }
+  .text-input { padding: 11px 13px; border: 1px solid var(--hairline-dark); border-radius: 9px; font: 14px/1 'Hanken Grotesk', sans-serif; color: var(--ink); background: var(--surface); outline: none; transition: border-color .15s; }
+  .text-input:focus { border-color: var(--clay); }
+  .field-error { font-size: 12.5px; color: var(--caution); padding: 9px 12px; background: rgba(154,90,74,.08); border-radius: 8px; margin-top: 4px; line-height: 1.5; }
+  .link-btn { background: none; border: none; font: 500 13px 'Hanken Grotesk', sans-serif; color: var(--clay); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0; }
+  .auth-switch { text-align: center; margin-top: 18px; font-size: 13px; color: var(--faint); }
+
+  /* Plan bar */
+  .plan-bar { display: flex; align-items: center; justify-content: space-between; padding: 9px 36px; border-bottom: 1px solid var(--hairline); background: var(--surface-sunken); gap: 12px; }
+  .plan-bar-left { display: flex; align-items: center; gap: 6px; }
+  .plan-name-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; font: 500 13px 'Hanken Grotesk', sans-serif; color: var(--ink); cursor: pointer; padding: 5px 9px; border-radius: 7px; transition: background .15s; }
+  .plan-name-btn:hover { background: rgba(33,31,26,.06); }
+  .plan-name-caret { font-size: 10px; color: var(--faint); }
+  .plan-save-status { font: 500 11px 'IBM Plex Mono', monospace; color: var(--faintest); margin-left: 4px; }
+  .plan-bar-right { display: flex; align-items: center; gap: 8px; }
+  .plan-action-btn { font: 500 12.5px 'Hanken Grotesk', sans-serif; color: var(--muted); background: none; border: 1px solid var(--hairline-dark); border-radius: 7px; padding: 6px 12px; cursor: pointer; transition: all .15s; }
+  .plan-action-btn:hover { border-color: var(--clay); color: var(--ink); }
+  .plan-action-logout { color: var(--caution); }
+  .plan-action-logout:hover { border-color: var(--caution); color: var(--caution); }
+
+  /* Plan dropdown */
+  .plan-dropdown { position: fixed; z-index: 300; background: var(--surface); border: 1px solid var(--hairline-dark); border-radius: 12px; box-shadow: 0 4px 24px rgba(33,31,26,.14); width: 280px; overflow: hidden; }
+  .plan-dropdown-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; transition: background .12s; }
+  .plan-dropdown-item:hover { background: var(--surface-sunken); }
+  .plan-dropdown-item.active-plan { background: rgba(122,106,74,.07); }
+  .plan-item-info { flex: 1; min-width: 0; }
+  .plan-item-name { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .plan-item-date { font: 400 11px 'IBM Plex Mono', monospace; color: var(--faintest); margin-top: 2px; }
+  .plan-item-delete { flex: none; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-size: 13px; color: var(--caution); opacity: 0; transition: opacity .15s, background .15s; background: none; border: none; cursor: pointer; }
+  .plan-dropdown-item:hover .plan-item-delete { opacity: 1; }
+  .plan-item-delete:hover { background: rgba(154,90,74,.1); }
+  .plan-item-check { flex: none; font-size: 12px; color: var(--sage); }
+  .plan-dropdown-footer { border-top: 1px solid var(--hairline); padding: 9px 14px; }
+  .plan-dropdown-new { background: none; border: none; font: 500 13px 'Hanken Grotesk', sans-serif; color: var(--clay); cursor: pointer; padding: 4px 0; }
+
+  /* Share modal */
+  .modal-overlay { position: fixed; inset: 0; z-index: 400; background: rgba(33,31,26,.5); display: flex; align-items: center; justify-content: center; }
+  .modal-card { background: var(--surface); border-radius: 16px; padding: 32px 36px; width: 480px; box-shadow: 0 20px 60px rgba(33,31,26,.2); }
+  .modal-title { font: 400 22px/1.2 'Newsreader', serif; color: var(--ink); margin-bottom: 8px; }
+  .modal-sub { font-size: 13px; line-height: 1.6; color: var(--muted); margin-bottom: 22px; }
+  .share-url-row { display: flex; gap: 8px; margin-bottom: 18px; }
+  .share-url-input { flex: 1; padding: 10px 12px; border: 1px solid var(--hairline-dark); border-radius: 9px; font: 11.5px 'IBM Plex Mono', monospace; color: var(--muted); background: var(--surface-sunken); outline: none; }
+  .share-copy-btn { padding: 10px 16px; border-radius: 9px; background: var(--ink); color: var(--surface); border: none; font: 600 13px 'Hanken Grotesk', sans-serif; cursor: pointer; transition: opacity .15s; white-space: nowrap; }
+  .share-copy-btn:hover { opacity: .85; }
+  .share-copy-btn.copied { background: var(--sage); }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--ink-on-dark); font-size: 13px; font-weight: 500; border-radius: 9px; padding: 11px 20px; z-index: 500; pointer-events: none; box-shadow: 0 4px 20px rgba(33,31,26,.25); opacity: 0; transition: opacity .2s; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+
+  /* Connect card */
   .connect-card { width: 760px; }
-
-  .connect-header {
-    padding: 22px 36px;
-    border-bottom: 1px solid var(--hairline);
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .connect-header { padding: 22px 36px; border-bottom: 1px solid var(--hairline); display: flex; align-items: center; justify-content: space-between; }
   .connect-header-left { display: flex; align-items: center; gap: 11px; }
-  .app-monogram {
-    width: 26px; height: 26px; border-radius: 7px;
-    background: var(--ink); color: var(--surface);
-    font-family: 'Newsreader', serif; font-size: 13px; font-weight: 600;
-    display: flex; align-items: center; justify-content: center;
-  }
+  .app-monogram { width: 26px; height: 26px; border-radius: 7px; background: var(--ink); color: var(--surface); font-family: 'Newsreader', serif; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
   .app-name { font-size: 14px; font-weight: 500; color: var(--ink); }
 
-  /* Stage wrapper */
   .stage { display: none; }
   .stage.active { display: block; }
 
-  /* ── Stage: choose ── */
   #stage-choose { padding: 34px 44px 40px; }
-  .connect-headline {
-    font-family: 'Newsreader', serif;
-    font-size: 28px; font-weight: 400; letter-spacing: -.01em;
-    color: var(--ink); margin-bottom: 10px;
-  }
-  .connect-sub {
-    font-size: 14.5px; line-height: 1.65; color: var(--muted);
-    max-width: 520px; margin-bottom: 28px;
-  }
-  .provider-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 10px; margin-bottom: 22px;
-  }
-  .provider-tile {
-    display: flex; align-items: center; gap: 12px;
-    padding: 13px 15px; border-radius: 12px;
-    border: 1px solid var(--hairline); background: var(--surface);
-    cursor: pointer; transition: all .15s;
-  }
+  .connect-headline { font-family: 'Newsreader', serif; font-size: 28px; font-weight: 400; letter-spacing: -.01em; color: var(--ink); margin-bottom: 10px; }
+  .connect-sub { font-size: 14.5px; line-height: 1.65; color: var(--muted); max-width: 520px; margin-bottom: 28px; }
+  .provider-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+  .provider-tile { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border-radius: 12px; border: 1px solid var(--hairline); background: var(--surface); cursor: pointer; transition: all .15s; }
   .provider-tile:hover:not(.disabled) { border-color: var(--clay); }
   .provider-tile.selected { border: 1.5px solid var(--clay); background: rgba(122,106,74,.07); }
-  .provider-tile.disabled {
-    opacity: 0.38; cursor: not-allowed;
-    pointer-events: none;
-  }
-  .provider-dot {
-    width: 34px; height: 34px; border-radius: 9px; flex: none;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600;
-  }
+  .provider-tile.disabled { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+  .provider-dot { width: 34px; height: 34px; border-radius: 9px; flex: none; display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; }
   .provider-name { font-size: 14px; font-weight: 500; color: var(--ink); }
-  .provider-soon {
-    margin-left: auto; font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px; font-weight: 500; letter-spacing: .08em;
-    text-transform: uppercase; color: var(--faintest);
-  }
-
-  .connect-btn {
-    width: 100%; padding: 14px; border-radius: 11px; border: none;
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all .15s;
-  }
+  .provider-soon { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--faintest); }
+  .connect-btn { width: 100%; padding: 14px; border-radius: 11px; border: none; font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
   .connect-btn.disabled { background: rgba(33,31,26,.09); color: var(--faint); cursor: default; }
   .connect-btn.enabled { background: var(--ink); color: var(--surface); }
-
   .or-divider { display: flex; align-items: center; gap: 14px; margin: 26px 0; }
   .or-line { flex: 1; height: 1px; background: rgba(33,31,26,.1); }
   .or-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--faintest); font-weight: 500; }
-
-  .demo-card {
-    display: flex; align-items: center; justify-content: space-between; gap: 20px;
-    padding: 20px 22px; background: var(--surface-sunken);
-    border: 1px solid var(--hairline); border-radius: 13px;
-  }
+  .demo-card { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 22px; background: var(--surface-sunken); border: 1px solid var(--hairline); border-radius: 13px; }
   .demo-title { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
   .demo-sub { font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 360px; }
-  .demo-btn {
-    flex: none; padding: 13px 20px; border-radius: 10px;
-    border: 1px solid var(--clay); background: transparent; color: var(--clay);
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 13.5px; font-weight: 600;
-    cursor: pointer; white-space: nowrap; transition: all .15s;
-  }
+  .demo-btn { flex: none; padding: 13px 20px; border-radius: 10px; border: 1px solid var(--clay); background: transparent; color: var(--clay); font-family: 'Hanken Grotesk', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .15s; }
   .demo-btn:hover { background: rgba(122,106,74,.08); }
   .security-note { display: flex; align-items: center; gap: 8px; margin-top: 24px; font-size: 12px; color: var(--faint); }
   .security-box { width: 13px; height: 13px; border: 1.5px solid var(--faint); border-radius: 3px; display: inline-block; flex: none; }
 
-  /* ── Stage: csv-upload ── */
   #stage-csv-upload { padding: 34px 44px 40px; }
-
-  .stage-back {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12.5px; font-weight: 500; color: var(--faint);
-    cursor: pointer; margin-bottom: 24px; transition: color .15s;
-    background: none; border: none; padding: 0; font-family: 'Hanken Grotesk', sans-serif;
-  }
+  .stage-back { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: var(--faint); cursor: pointer; margin-bottom: 24px; transition: color .15s; background: none; border: none; padding: 0; font-family: 'Hanken Grotesk', sans-serif; }
   .stage-back:hover { color: var(--ink); }
-
   .provider-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-  .provider-header-dot {
-    width: 30px; height: 30px; border-radius: 9px; flex: none;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-family: 'Newsreader', serif; font-size: 14px; font-weight: 600;
-  }
-
-  .export-steps {
-    background: var(--surface-sunken);
-    border: 1px solid var(--hairline); border-radius: 12px;
-    padding: 18px 22px; margin-bottom: 24px;
-  }
+  .provider-header-dot { width: 30px; height: 30px; border-radius: 9px; flex: none; display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Newsreader', serif; font-size: 14px; font-weight: 600; }
+  .export-steps { background: var(--surface-sunken); border: 1px solid var(--hairline); border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; }
   .export-steps-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
-  .export-step {
-    display: flex; gap: 12px; align-items: flex-start;
-    font-size: 13px; line-height: 1.5; color: var(--muted);
-    padding: 6px 0; border-bottom: 1px solid var(--hairline);
-  }
+  .export-step { display: flex; gap: 12px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: var(--muted); padding: 6px 0; border-bottom: 1px solid var(--hairline); }
   .export-step:last-child { border-bottom: none; padding-bottom: 0; }
-  .step-num {
-    width: 20px; height: 20px; border-radius: 99px; flex: none;
-    background: var(--ink); color: var(--surface);
-    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
-    display: flex; align-items: center; justify-content: center; margin-top: 1px;
-  }
-
-  .dropzone {
-    border: 1.5px dashed rgba(33,31,26,.2); border-radius: 13px;
-    padding: 36px 24px; text-align: center; cursor: pointer;
-    transition: all .15s; position: relative; background: var(--surface);
-  }
+  .step-num { width: 20px; height: 20px; border-radius: 99px; flex: none; background: var(--ink); color: var(--surface); font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .dropzone { border: 1.5px dashed rgba(33,31,26,.2); border-radius: 13px; padding: 36px 24px; text-align: center; cursor: pointer; transition: all .15s; position: relative; background: var(--surface); }
   .dropzone:hover, .dropzone.drag-over { border-color: var(--clay); background: rgba(122,106,74,.04); }
   .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .dropzone-icon { font-size: 28px; margin-bottom: 10px; }
   .dropzone-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
   .dropzone-sub { font-size: 12.5px; color: var(--faint); }
-  .dropzone-file-name {
-    display: none; margin-top: 10px;
-    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;
-    color: var(--sage); font-weight: 500;
-  }
+  .dropzone-file-name { display: none; margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--sage); font-weight: 500; }
+  .skip-link { display: block; text-align: center; margin-top: 18px; font-size: 13px; color: var(--clay); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; background: none; border: none; font-family: 'Hanken Grotesk', sans-serif; width: 100%; }
 
-  .skip-link {
-    display: block; text-align: center; margin-top: 18px;
-    font-size: 13px; color: var(--clay); cursor: pointer;
-    text-decoration: underline; text-underline-offset: 3px;
-    background: none; border: none; font-family: 'Hanken Grotesk', sans-serif; width: 100%;
-  }
-
-  /* ── Stage: csv-review ── */
   #stage-csv-review { padding: 34px 44px 40px; }
-
   .review-rows { display: flex; flex-direction: column; margin: 24px 0; }
-  .review-row {
-    display: flex; align-items: center; justify-content: space-between; gap: 20px;
-    padding: 16px 0; border-bottom: 1px solid var(--hairline);
-  }
+  .review-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--hairline); }
   .review-row:last-child { border-bottom: none; }
   .review-row-left { flex: 1; min-width: 0; }
   .review-row-label { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
   .review-row-label.debt-label { color: var(--caution); }
   .acct-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-  .acct-tag {
-    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
-    padding: 3px 8px; border-radius: 5px;
-    background: rgba(33,31,26,.06); color: var(--muted);
-  }
+  .acct-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 5px; background: rgba(33,31,26,.06); color: var(--muted); }
   .no-accts { font-size: 12px; color: var(--faintest); font-style: italic; }
-
   .balance-field { display: flex; align-items: center; gap: 4px; }
   .balance-sign { font-size: 14px; font-weight: 500; color: var(--faint); }
   .balance-sign.neg { color: var(--caution); }
-  .balance-input {
-    width: 130px; padding: 8px 10px;
-    border: 1px solid var(--hairline-dark); border-radius: 8px;
-    font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500;
-    color: var(--ink); background: var(--surface); text-align: right;
-    outline: none; transition: border-color .15s;
-  }
+  .balance-input { width: 130px; padding: 8px 10px; border: 1px solid var(--hairline-dark); border-radius: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--ink); background: var(--surface); text-align: right; outline: none; transition: border-color .15s; }
   .balance-input.debt-input { color: var(--caution); }
   .balance-input:focus { border-color: var(--clay); }
-  .balance-hint {
-    font-family: 'IBM Plex Mono', monospace; font-size: 10px;
-    color: var(--faintest); margin-top: 4px; text-align: right;
-  }
-
-  .review-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    padding-top: 20px; border-top: 1px solid var(--hairline-dark); margin-top: 4px;
-    gap: 20px;
-  }
+  .balance-hint { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--faintest); margin-top: 4px; text-align: right; }
+  .review-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid var(--hairline-dark); margin-top: 4px; gap: 20px; }
   .review-nw-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); margin-bottom: 4px; }
   .review-nw-val { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 400; color: var(--ink); letter-spacing: -.01em; }
-
   .age-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
   .age-label { font-size: 13px; font-weight: 500; color: var(--muted); }
-  .age-input {
-    width: 64px; padding: 7px 10px;
-    border: 1px solid var(--hairline-dark); border-radius: 8px;
-    font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500;
-    color: var(--ink); background: var(--surface); text-align: center;
-    outline: none; transition: border-color .15s;
-  }
+  .age-input { width: 64px; padding: 7px 10px; border: 1px solid var(--hairline-dark); border-radius: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--ink); background: var(--surface); text-align: center; outline: none; transition: border-color .15s; }
   .age-input:focus { border-color: var(--clay); }
   .age-hint { font-size: 12px; color: var(--faint); }
-
-  .confirm-btn {
-    flex: none; padding: 13px 24px; border-radius: 11px; border: none;
-    background: var(--ink); color: var(--surface);
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: opacity .15s; white-space: nowrap;
-  }
+  .confirm-btn { flex: none; padding: 13px 24px; border-radius: 11px; border: none; background: var(--ink); color: var(--surface); font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .15s; white-space: nowrap; }
   .confirm-btn:hover { opacity: .85; }
 
-  /* ── Stage: ready ── */
   #stage-ready { display: none; padding: 48px 44px 44px; text-align: center; }
-  .ready-check {
-    width: 54px; height: 54px; border-radius: 99px;
-    background: var(--sage); color: var(--surface);
-    font-family: 'Newsreader', serif; font-size: 26px;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 22px;
-  }
+  .ready-check { width: 54px; height: 54px; border-radius: 99px; background: var(--sage); color: var(--surface); font-family: 'Newsreader', serif; font-size: 26px; display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; }
   .ready-title { font-family: 'Newsreader', serif; font-size: 27px; font-weight: 400; letter-spacing: -.01em; color: var(--ink); margin-bottom: 12px; }
   .ready-sub { font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 440px; margin: 0 auto 26px; }
   .stat-strip { display: flex; justify-content: center; max-width: 440px; margin: 0 auto 30px; border: 1px solid var(--hairline-dark); border-radius: 12px; overflow: hidden; }
@@ -289,19 +186,13 @@
   .stat-val { font-family: 'Newsreader', serif; font-size: 20px; color: var(--ink); }
   .stat-val.sage { color: var(--sage); }
   .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); margin-top: 5px; }
-  .open-btn {
-    display: inline-block; padding: 14px 28px; border-radius: 11px;
-    background: var(--ink); color: var(--surface);
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
-    text-decoration: none; cursor: pointer; border: none; transition: opacity .15s;
-  }
+  .open-btn { display: inline-block; padding: 14px 28px; border-radius: 11px; background: var(--ink); color: var(--surface); font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: opacity .15s; }
   .open-btn:hover { opacity: .85; }
   .reset-link { display: block; margin-top: 18px; font-size: 13px; font-weight: 500; color: var(--clay); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
-  /* ── Lab screen ── */
+  /* Lab */
   #screen-lab { background: var(--bg); }
   .lab-card { width: 1240px; }
-
   .lab-header { padding: 24px 36px; border-bottom: 1px solid var(--hairline); display: flex; align-items: center; justify-content: space-between; }
   .lab-header-left { display: flex; align-items: center; gap: 13px; }
   .avatars { display: flex; }
@@ -311,9 +202,7 @@
   .household-name { font-size: 14px; font-weight: 500; color: var(--ink); }
   .household-sub { font-size: 11.5px; color: var(--faint); margin-top: 1px; }
   .source-badge { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: .06em; color: var(--faint); }
-
   .lab-body { display: grid; grid-template-columns: 300px 1fr; }
-
   .accounts-panel { padding: 28px 30px; border-right: 1px solid var(--hairline); background: var(--surface-sunken); }
   .accounts-caption { font-size: 12px; line-height: 1.5; color: var(--faint); margin: 6px 0 22px; }
   .account-rows { display: flex; flex-direction: column; gap: 15px; }
@@ -323,7 +212,6 @@
   .net-worth-footer { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(33,31,26,.1); }
   .net-worth-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); }
   .net-worth-val { font-family: 'Newsreader', serif; font-size: 34px; color: var(--ink); letter-spacing: -.01em; margin-top: 6px; }
-
   .model-panel { padding: 26px 34px; }
   .model-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 24px; }
   .model-card { border-radius: 11px; padding: 13px 14px; cursor: pointer; transition: all .15s; text-align: left; border: 1px solid var(--hairline-dark); background: var(--surface-sunken); color: var(--ink); }
@@ -331,7 +219,6 @@
   .model-card.active { border-color: var(--clay); background: var(--clay); color: #fffdf8; }
   .model-card-name { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
   .model-card-desc { font-size: 11px; opacity: .78; }
-
   .result-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
   .result-left .m-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); }
   .result-left .m-big { font-family: 'Newsreader', serif; font-size: 44px; line-height: 1; letter-spacing: -.02em; color: var(--ink); margin-top: 8px; }
@@ -339,7 +226,6 @@
   .result-right { max-width: 330px; text-align: right; }
   .result-right .m-note { font-size: 13px; line-height: 1.55; font-weight: 500; }
   .result-right .m-fine { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--faintest); margin-top: 10px; }
-
   .chart-svg { width: 100%; height: auto; display: block; }
   .x-axis { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: var(--faintest); padding: 2px 4px 0; }
   .x-axis .today { color: var(--ink); }
@@ -348,20 +234,17 @@
   .legend-solid { width: 16px; height: 2px; background: var(--sage); border-radius: 2px; }
   .legend-dashed { width: 16px; height: 0; border-top: 1.5px dashed rgba(33,31,26,.4); }
   .legend-band { width: 16px; height: 9px; background: var(--sage); opacity: .3; border-radius: 2px; }
-
   .sliders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 34px; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--hairline); }
   .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
   .slider-label { font-size: 12.5px; font-weight: 500; color: var(--muted); }
   .slider-val { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; color: var(--ink); }
   input[type=range] { width: 100%; accent-color: var(--clay); cursor: pointer; display: block; }
-
   .whatifs { margin-top: 20px; }
   .whatifs-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); margin-bottom: 12px; }
   .pills { display: flex; flex-wrap: wrap; gap: 10px; }
   .pill { font-size: 12.5px; font-weight: 500; border-radius: 99px; padding: 9px 15px; cursor: pointer; transition: all .15s; color: var(--muted); border: 1px solid rgba(33,31,26,.16); background: transparent; font-family: 'Hanken Grotesk', sans-serif; }
   .pill:hover { border-color: var(--clay); color: var(--ink); }
   .pill.active { color: #fffdf8; border-color: var(--clay); background: var(--clay); }
-
   .risks-panel { padding: 26px 36px; border-top: 1px solid var(--hairline); background: var(--ink); }
   .risks-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
   .risks-title { font-family: 'Newsreader', serif; font-size: 18px; color: var(--ink-on-dark); }
@@ -373,45 +256,88 @@
   .risk-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; }
   .risk-title { font-size: 13.5px; font-weight: 600; color: var(--ink-on-dark); margin-bottom: 7px; }
   .risk-body { font-size: 12.5px; line-height: 1.55; color: #9a948a; }
-
-  .back-btn {
-    position: fixed; top: 20px; left: 20px;
-    background: var(--surface); border: 1px solid var(--hairline-dark);
-    border-radius: 8px; padding: 8px 14px;
-    font-size: 12.5px; font-weight: 500; color: var(--muted);
-    cursor: pointer; font-family: 'Hanken Grotesk', sans-serif;
-    display: none; transition: all .15s; z-index: 100;
-    box-shadow: 0 1px 3px rgba(33,31,26,.08);
-  }
+  .back-btn { position: fixed; top: 20px; left: 20px; background: var(--surface); border: 1px solid var(--hairline-dark); border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 500; color: var(--muted); cursor: pointer; font-family: 'Hanken Grotesk', sans-serif; display: none; transition: all .15s; z-index: 100; box-shadow: 0 1px 3px rgba(33,31,26,.08); }
   .back-btn:hover { color: var(--ink); border-color: var(--clay); }
-
-  /* ── Resume stage ── */
-  .resume-stat-strip {
-    display: flex; border: 1px solid var(--hairline-dark);
-    border-radius: 12px; overflow: hidden; margin: 22px 0 28px;
-  }
-  .resume-stat-cell {
-    flex: 1; padding: 14px 16px;
-    border-right: 1px solid rgba(33,31,26,.08);
-  }
+  .resume-stat-strip { display: flex; border: 1px solid var(--hairline-dark); border-radius: 12px; overflow: hidden; margin: 22px 0 28px; }
+  .resume-stat-cell { flex: 1; padding: 14px 16px; border-right: 1px solid rgba(33,31,26,.08); }
   .resume-stat-cell:last-child { border-right: none; }
   .resume-stat-val { font-family: 'Newsreader', serif; font-size: 24px; color: var(--ink); margin-top: 4px; }
-
-  /* ── Saved indicator ── */
-  .saved-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500;
-    letter-spacing: .06em; text-transform: uppercase;
-    color: var(--sage); opacity: 0; transition: opacity .4s;
-  }
+  .saved-badge { display: inline-flex; align-items: center; gap: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--sage); opacity: 0; transition: opacity .4s; }
   .saved-badge.show { opacity: 1; }
   .saved-dot { width: 6px; height: 6px; border-radius: 99px; background: var(--sage); }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════ CONNECT SCREEN ═══════════════════════ -->
-<div id="screen-connect" class="screen active">
+<!-- AUTH SCREEN -->
+<div id="screen-auth" class="screen active">
+  <div class="card connect-card">
+    <div class="connect-header">
+      <div class="connect-header-left">
+        <div class="app-monogram">P</div>
+        <div class="app-name">Planner in a box</div>
+      </div>
+      <div class="eyebrow">Account</div>
+    </div>
+
+    <div id="stage-login" class="stage active">
+      <div style="padding:40px 44px 44px">
+        <h2 class="connect-headline" style="margin-bottom:8px">Welcome back.</h2>
+        <p class="connect-sub" style="margin-bottom:28px">Sign in to access your plans.</p>
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <input type="email" id="login-email" class="text-input" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input type="password" id="login-password" class="text-input" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div class="field-error" id="login-error" style="display:none"></div>
+        <button class="connect-btn enabled" id="login-btn" style="margin-top:18px">Log in</button>
+        <div class="auth-switch">Don't have an account? <button class="link-btn" id="goto-signup">Create one →</button></div>
+      </div>
+    </div>
+
+    <div id="stage-signup" class="stage">
+      <div style="padding:40px 44px 44px">
+        <h2 class="connect-headline" style="margin-bottom:8px">Create your account.</h2>
+        <p class="connect-sub" style="margin-bottom:28px">Plans are saved securely and sync across devices.</p>
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <input type="email" id="signup-email" class="text-input" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password <span style="color:var(--faintest);font-weight:400">(8+ characters)</span></label>
+          <input type="password" id="signup-password" class="text-input" placeholder="••••••••" autocomplete="new-password">
+        </div>
+        <div class="field-error" id="signup-error" style="display:none"></div>
+        <button class="connect-btn enabled" id="signup-btn" style="margin-top:18px">Create account →</button>
+        <div class="auth-switch">Already have an account? <button class="link-btn" id="goto-login">Log in →</button></div>
+      </div>
+    </div>
+
+    <div id="stage-verify-pending" class="stage">
+      <div style="padding:52px 44px;text-align:center">
+        <div style="font-size:40px;margin-bottom:20px">✉️</div>
+        <h2 class="ready-title" style="margin-bottom:10px">Check your email</h2>
+        <p class="ready-sub">We sent a link to <strong id="verify-email-display"></strong>.<br>Click it to activate your account.</p>
+        <p style="font-size:12.5px;color:var(--faint);margin-top:28px">Didn't get it? <button class="link-btn" id="resend-btn">Resend</button></p>
+      </div>
+    </div>
+
+    <div id="stage-verified" class="stage">
+      <div style="padding:52px 44px;text-align:center">
+        <div class="ready-check" style="margin:0 auto 22px">✓</div>
+        <h2 class="ready-title">Email verified!</h2>
+        <p class="ready-sub">Your account is confirmed. Log in to start planning.</p>
+        <button class="connect-btn enabled" id="goto-login-from-verify" style="margin-top:4px">Log in →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECT SCREEN -->
+<div id="screen-connect" class="screen">
   <div class="card connect-card">
     <div class="connect-header">
       <div class="connect-header-left">
@@ -421,7 +347,6 @@
       <div class="eyebrow" style="letter-spacing:.06em">SETUP</div>
     </div>
 
-    <!-- Stage: resume (shown on return visits with saved data) -->
     <div id="stage-resume" class="stage">
       <div style="padding:40px 44px 44px">
         <div class="eyebrow" style="margin-bottom:18px">Welcome back</div>
@@ -430,61 +355,36 @@
           <div style="font:500 14px 'Hanken Grotesk';color:var(--muted)" id="resume-nw-label">net worth</div>
         </div>
         <div style="font:400 13px 'Hanken Grotesk';color:var(--faint);margin-bottom:2px" id="resume-source-line"></div>
-
         <div class="resume-stat-strip">
-          <div class="resume-stat-cell">
-            <div class="eyebrow">Retire at</div>
-            <div class="resume-stat-val" id="resume-retire">65</div>
-          </div>
-          <div class="resume-stat-cell">
-            <div class="eyebrow">Saving / mo</div>
-            <div class="resume-stat-val" id="resume-monthly">$4,300</div>
-          </div>
-          <div class="resume-stat-cell">
-            <div class="eyebrow">Model</div>
-            <div class="resume-stat-val" id="resume-model">4% Rule</div>
-          </div>
-          <div class="resume-stat-cell">
-            <div class="eyebrow">Spend / yr</div>
-            <div class="resume-stat-val" id="resume-spend">$132k</div>
-          </div>
+          <div class="resume-stat-cell"><div class="eyebrow">Retire at</div><div class="resume-stat-val" id="resume-retire">65</div></div>
+          <div class="resume-stat-cell"><div class="eyebrow">Saving / mo</div><div class="resume-stat-val" id="resume-monthly">$4,300</div></div>
+          <div class="resume-stat-cell"><div class="eyebrow">Model</div><div class="resume-stat-val" id="resume-model">4% Rule</div></div>
+          <div class="resume-stat-cell"><div class="eyebrow">Spend / yr</div><div class="resume-stat-val" id="resume-spend">$132k</div></div>
         </div>
-
         <button class="connect-btn enabled" id="resume-continue-btn">Continue where you left off →</button>
-        <div style="text-align:center;margin-top:14px">
-          <span class="reset-link" id="resume-startfresh">Start fresh</span>
-        </div>
+        <div style="text-align:center;margin-top:14px"><span class="reset-link" id="resume-startfresh">Start fresh</span></div>
       </div>
     </div>
 
-    <!-- Stage: choose -->
-    <div id="stage-choose" class="stage active">
+    <div id="stage-choose" class="stage">
       <div style="padding:34px 44px 40px">
         <h2 class="connect-headline">Bring your finances in.</h2>
-        <p class="connect-sub">Works with the tools you already use — or none at all. Connections are read-only and secure; the planner never moves your money.</p>
+        <p class="connect-sub">Works with the tools you already use — or none at all. Connections are read-only and secure.</p>
         <div class="eyebrow" style="margin-bottom:14px">Connect a source</div>
         <div class="provider-grid" id="provider-grid"></div>
         <button class="connect-btn disabled" id="connect-btn">Choose a source above</button>
-        <div class="or-divider">
-          <div class="or-line"></div>
-          <div class="or-label">OR</div>
-          <div class="or-line"></div>
-        </div>
+        <div class="or-divider"><div class="or-line"></div><div class="or-label">OR</div><div class="or-line"></div></div>
         <div class="demo-card">
           <div>
             <div class="demo-title">Just looking around?</div>
-            <div class="demo-sub">Explore the full planner with a sample household — no account, no sign-up, nothing connected.</div>
+            <div class="demo-sub">Explore with a sample household — nothing connected.</div>
           </div>
           <button class="demo-btn" id="demo-btn">Enter demo mode →</button>
         </div>
-        <div class="security-note">
-          <span class="security-box"></span>
-          Bank-level encryption · read-only · you can disconnect any source anytime.
-        </div>
+        <div class="security-note"><span class="security-box"></span>Bank-level encryption · read-only · you can disconnect any source anytime.</div>
       </div>
     </div>
 
-    <!-- Stage: csv-upload -->
     <div id="stage-csv-upload" class="stage">
       <div style="padding:34px 44px 40px">
         <button class="stage-back" id="back-to-choose">← Back</button>
@@ -493,9 +393,7 @@
           <h2 class="connect-headline" style="margin:0" id="upload-headline"></h2>
         </div>
         <p class="connect-sub" id="upload-sub"></p>
-
         <div class="export-steps" id="export-steps"></div>
-
         <div class="dropzone" id="csv-dropzone">
           <input type="file" id="csv-file-input" accept=".csv,.CSV">
           <div class="dropzone-icon">📂</div>
@@ -503,37 +401,28 @@
           <div class="dropzone-sub">Exported from your finance app · .csv files only</div>
           <div class="dropzone-file-name" id="dropzone-filename"></div>
         </div>
-
         <button class="skip-link" id="skip-to-manual">Skip — I'll enter my balances manually</button>
       </div>
     </div>
 
-    <!-- Stage: csv-review -->
     <div id="stage-csv-review" class="stage">
       <div style="padding:34px 44px 40px">
         <button class="stage-back" id="back-to-upload">← Back</button>
         <h2 class="connect-headline">Review your balances</h2>
-        <p class="connect-sub" id="review-sub">Adjust any amount that looks off — these feed directly into the planner.</p>
-
+        <p class="connect-sub" id="review-sub">Adjust any amount that looks off.</p>
         <div class="age-row">
           <span class="age-label">Your current age</span>
           <input type="number" class="age-input" id="age-input" min="18" max="80" value="38">
           <span class="age-hint">Used for projections</span>
         </div>
-
         <div class="review-rows" id="review-rows"></div>
-
         <div class="review-footer">
-          <div>
-            <div class="review-nw-label">Net worth</div>
-            <div class="review-nw-val" id="review-nw">$0</div>
-          </div>
+          <div><div class="review-nw-label">Net worth</div><div class="review-nw-val" id="review-nw">$0</div></div>
           <button class="confirm-btn" id="confirm-btn">These look right →</button>
         </div>
       </div>
     </div>
 
-    <!-- Stage: ready -->
     <div id="stage-ready" class="stage">
       <div style="padding:48px 44px 44px;text-align:center">
         <div class="ready-check">✓</div>
@@ -548,14 +437,12 @@
         <span class="reset-link" id="reset-link">Use a different source</span>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- ═══════════════════════ LAB SCREEN ═══════════════════════ -->
+<!-- LAB SCREEN -->
 <div id="screen-lab" class="screen">
   <div class="card lab-card">
-
     <div class="lab-header">
       <div class="lab-header-left">
         <div class="avatars">
@@ -573,6 +460,20 @@
       </div>
     </div>
 
+    <div class="plan-bar" id="plan-bar">
+      <div class="plan-bar-left">
+        <button class="plan-name-btn" id="plan-name-btn">
+          <span id="plan-name-display">My plan</span>
+          <span class="plan-name-caret">▾</span>
+        </button>
+        <span class="plan-save-status" id="plan-save-status"></span>
+      </div>
+      <div class="plan-bar-right" id="plan-bar-right">
+        <button class="plan-action-btn" id="share-btn">Share →</button>
+        <button class="plan-action-btn plan-action-logout" id="logout-btn">Log out</button>
+      </div>
+    </div>
+
     <div class="lab-body">
       <div class="accounts-panel">
         <div class="eyebrow">Your accounts today</div>
@@ -583,7 +484,6 @@
           <div class="net-worth-val" id="lab-nw"></div>
         </div>
       </div>
-
       <div class="model-panel">
         <div class="eyebrow" style="margin-bottom:12px">Run a planning model</div>
         <div class="model-grid">
@@ -592,7 +492,6 @@
           <div class="model-card" data-model="guard"><div class="model-card-name">Guardrails</div><div class="model-card-desc">Guyton-Klinger dynamic</div></div>
           <div class="model-card" data-model="mc"><div class="model-card-name">Monte Carlo</div><div class="model-card-desc">1,000 market paths</div></div>
         </div>
-
         <div class="result-row">
           <div class="result-left">
             <div class="m-label" id="m-label">Safe annual income</div>
@@ -604,7 +503,6 @@
             <div class="m-fine" id="m-fine"></div>
           </div>
         </div>
-
         <svg class="chart-svg" viewBox="0 0 1020 270" id="chart-svg" preserveAspectRatio="none">
           <line x1="64" y1="250" x2="956" y2="250" stroke="rgba(33,31,26,.12)" stroke-width="1"/>
           <line x1="64" y1="142" x2="956" y2="142" stroke="rgba(33,31,26,.05)" stroke-width="1"/>
@@ -615,39 +513,15 @@
           <line id="retire-line" x1="500" y1="26" x2="500" y2="250" stroke="rgba(33,31,26,.28)" stroke-width="1" stroke-dasharray="2 4"/>
           <circle id="retire-dot" cx="500" cy="150" r="5" fill="#211f1a"/>
         </svg>
-        <div class="x-axis">
-          <span class="today" id="x-today">Today · 38</span>
-          <span>your retirement</span>
-          <span>age 95</span>
-        </div>
-        <div class="legend" id="legend-det">
-          <span class="legend-item"><span class="legend-solid"></span>This scenario</span>
-          <span class="legend-item"><span class="legend-dashed"></span>Baseline plan</span>
-        </div>
-        <div class="legend" id="legend-mc" style="display:none">
-          <span class="legend-item"><span class="legend-band"></span>10th–90th percentile of outcomes</span>
-          <span class="legend-item"><span class="legend-solid"></span>Median path</span>
-        </div>
-
+        <div class="x-axis"><span class="today" id="x-today">Today · 38</span><span>your retirement</span><span>age 95</span></div>
+        <div class="legend" id="legend-det"><span class="legend-item"><span class="legend-solid"></span>This scenario</span><span class="legend-item"><span class="legend-dashed"></span>Baseline plan</span></div>
+        <div class="legend" id="legend-mc" style="display:none"><span class="legend-item"><span class="legend-band"></span>10th–90th percentile</span><span class="legend-item"><span class="legend-solid"></span>Median path</span></div>
         <div class="sliders-grid">
-          <div>
-            <div class="slider-header"><span class="slider-label">Retire at age</span><span class="slider-val" id="val-retire">65</span></div>
-            <input type="range" id="sl-retire" min="55" max="75" step="1" value="65">
-          </div>
-          <div>
-            <div class="slider-header"><span class="slider-label">Saved together / month</span><span class="slider-val" id="val-monthly">$4,300</span></div>
-            <input type="range" id="sl-monthly" min="1500" max="8000" step="100" value="4300">
-          </div>
-          <div>
-            <div class="slider-header"><span class="slider-label">Expected return</span><span class="slider-val" id="val-ret">6.0%</span></div>
-            <input type="range" id="sl-ret" min="3" max="9" step="0.5" value="6">
-          </div>
-          <div>
-            <div class="slider-header"><span class="slider-label">Spending in retirement</span><span class="slider-val" id="val-spend">$11,000/mo</span></div>
-            <input type="range" id="sl-spend" min="60000" max="220000" step="4000" value="132000">
-          </div>
+          <div><div class="slider-header"><span class="slider-label">Retire at age</span><span class="slider-val" id="val-retire">65</span></div><input type="range" id="sl-retire" min="55" max="75" step="1" value="65"></div>
+          <div><div class="slider-header"><span class="slider-label">Saved together / month</span><span class="slider-val" id="val-monthly">$4,300</span></div><input type="range" id="sl-monthly" min="1500" max="8000" step="100" value="4300"></div>
+          <div><div class="slider-header"><span class="slider-label">Expected return</span><span class="slider-val" id="val-ret">6.0%</span></div><input type="range" id="sl-ret" min="3" max="9" step="0.5" value="6"></div>
+          <div><div class="slider-header"><span class="slider-label">Spending in retirement</span><span class="slider-val" id="val-spend">$11,000/mo</span></div><input type="range" id="sl-spend" min="60000" max="220000" step="4000" value="132000"></div>
         </div>
-
         <div class="whatifs">
           <div class="whatifs-label">Life what-ifs</div>
           <div class="pills">
@@ -666,45 +540,75 @@
       </div>
       <div class="risks-grid" id="risks-grid"></div>
     </div>
-
   </div>
 </div>
 
+<!-- Plan dropdown (outside lab card so it's not clipped) -->
+<div class="plan-dropdown" id="plan-dropdown" style="display:none">
+  <div id="plan-list"></div>
+  <div class="plan-dropdown-footer">
+    <button class="plan-dropdown-new" id="new-plan-btn">+ New plan</button>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="modal-overlay" id="share-modal" style="display:none">
+  <div class="modal-card">
+    <div class="modal-title">Share this plan</div>
+    <div class="modal-sub">Anyone with this link can view and edit — great for planning with a partner.</div>
+    <div class="share-url-row">
+      <input type="text" id="share-url-input" class="share-url-input" readonly>
+      <button id="share-copy-btn" class="share-copy-btn">Copy link</button>
+    </div>
+    <button class="plan-action-btn" id="share-close-btn" style="width:100%;padding:11px;text-align:center">Done</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 <button class="back-btn" id="back-btn">← Connect screen</button>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// CONFIG — update API_BASE after Railway deployment
+// ═══════════════════════════════════════════════════
+const API_BASE = 'https://YOUR_RAILWAY_URL.railway.app';
+
+// ═══════════════════════════════════════════════════
+// AUTH STATE
+// ═══════════════════════════════════════════════════
+let authToken     = localStorage.getItem('auth-token');
+let authEmail     = '';
+let currentPlanId = localStorage.getItem('current-plan-id');
+let shareToken    = null;
+let isShareMode   = false;
+let currentPlanName = 'My plan';
+
+// ═══════════════════════════════════════════════════
+// PLANNER STATE
+// ═══════════════════════════════════════════════════
 const DEMO_ACCOUNTS = {
-  cash:        { label: 'Cash & savings',   sub: 'Checking · HYSA',      value:  104200 },
-  investments: { label: 'Investments',      sub: 'Joint brokerage',       value:  402800 },
-  retirement:  { label: 'Retirement',       sub: '401(k) · Roth IRA',     value:  214000 },
-  homeEquity:  { label: 'Home equity',      sub: '',                      value:  310000 },
-  debt:        { label: 'Mortgage & debt',  sub: '',                      value: -418600 },
+  cash:        { label:'Cash & savings',  sub:'Checking · HYSA',    value:  104200 },
+  investments: { label:'Investments',     sub:'Joint brokerage',     value:  402800 },
+  retirement:  { label:'Retirement',      sub:'401(k) · Roth IRA',   value:  214000 },
+  homeEquity:  { label:'Home equity',     sub:'',                    value:  310000 },
+  debt:        { label:'Mortgage & debt', sub:'',                    value: -418600 },
 };
 
 const state = {
-  // planner inputs
-  retireAge: 65, monthly: 4300, ret: 6, spend: 132000,
-  house: false, college: false, yearoff: false,
-  model: '4pct',
-  // connection
-  connSource: null, demoMode: false,
-  // user data (real or demo)
-  userAge: 38,
-  accountData: null,   // filled on confirm; null = use demo
-  csvAccountMap: null, // intermediate CSV parse result
+  retireAge:65, monthly:4300, ret:6, spend:132000,
+  house:false, college:false, yearoff:false, model:'4pct',
+  connSource:null, demoMode:false, userAge:38,
+  accountData:null, csvAccountMap:null,
 };
 
 function netWorth() {
-  const data = state.demoMode ? DEMO_ACCOUNTS : (state.accountData || DEMO_ACCOUNTS);
-  return Object.values(data).reduce((s, a) => s + a.value, 0);
+  const d = state.demoMode ? DEMO_ACCOUNTS : (state.accountData || DEMO_ACCOUNTS);
+  return Object.values(d).reduce((s,a) => s + a.value, 0);
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // PROVIDERS
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 const PROVIDERS = [
   { key:'simplifi', name:'Quicken Simplifi', initial:'S', bg:'#5a7fb0', active:true  },
   { key:'monarch',  name:'Monarch Money',    initial:'M', bg:'#3f6b5a', active:false },
@@ -718,649 +622,642 @@ const PROV_MAP = Object.fromEntries(PROVIDERS.map(p => [p.key, p]));
 
 const EXPORT_STEPS = {
   simplifi: {
-    headline: 'Connect Quicken Simplifi',
-    sub: 'Export your transactions — we\'ll read your account balances from the data.',
-    steps: [
-      'Open Simplifi and click your profile / Settings',
-      'Find "Export Data" and choose "Transactions"',
-      'Set the date range to "All Time" for the most complete picture',
-      'Download the CSV and upload it below',
-    ]
+    headline:'Connect Quicken Simplifi',
+    sub:'Export your transactions — we\'ll read your account balances from the data.',
+    steps:['Open Simplifi and click your profile / Settings','Find "Export Data" and choose "Transactions"','Set the date range to "All Time" for the most complete picture','Download the CSV and upload it below']
   },
   manual: {
-    headline: 'Import from CSV',
-    sub: 'Export transactions from any finance app and upload the CSV — we\'ll group them by account.',
-    steps: [
-      'Open your finance app (Mint, YNAB, Monarch, Personal Capital, etc.)',
-      'Look for "Export" or "Download" in Settings or Transactions',
-      'Download as CSV format',
-      'Upload it below — we\'ll read the Account and Amount columns',
-    ]
+    headline:'Import from CSV',
+    sub:'Export transactions from any finance app and upload the CSV — we\'ll group them by account.',
+    steps:['Open your finance app (Mint, YNAB, Monarch, Personal Capital, etc.)','Look for "Export" or "Download" in Settings or Transactions','Download as CSV format','Upload it below — we\'ll read the Account and Amount columns']
   },
 };
+function getExportInfo(k) { return EXPORT_STEPS[k] || EXPORT_STEPS.manual; }
 
-function getExportInfo(key) {
-  return EXPORT_STEPS[key] || EXPORT_STEPS.manual;
-}
-
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // CSV PARSING
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function parseCSVLine(line) {
-  const result = []; let current = ''; let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') {
-      if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
-      else inQuotes = !inQuotes;
-    } else if (ch === ',' && !inQuotes) { result.push(current); current = ''; }
-    else current += ch;
+  const r=[]; let cur='', inQ=false;
+  for (let i=0; i<line.length; i++) {
+    const c=line[i];
+    if (c==='"') { if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ; }
+    else if (c===','&&!inQ) { r.push(cur); cur=''; }
+    else cur+=c;
   }
-  result.push(current);
-  return result.map(s => s.replace(/^"|"$/g, '').trim());
+  r.push(cur);
+  return r.map(s=>s.replace(/^"|"$/g,'').trim());
 }
 
 function parseCSV(text) {
-  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim().split('\n');
-  if (lines.length < 2) return { error: 'File is too short — needs a header row and at least one transaction.' };
-
-  const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase());
-
-  // Find key columns
-  const amtIdx  = headers.findIndex(h => h === 'amount' || h.includes('amount') || h === 'amt');
-  const accIdx  = headers.findIndex(h => h === 'account' || h === 'account name' || h.includes('account'));
-  const typeIdx = headers.findIndex(h => h === 'account type' || h === 'type' || h.includes('account type'));
-
-  if (accIdx === -1) return { error: 'Couldn\'t find an "Account" column. Make sure you exported transactions (not a summary).' };
-  if (amtIdx === -1) return { error: 'Couldn\'t find an "Amount" column in this file.' };
-
-  const accountMap = {};
-  let txCount = 0;
-
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-    const cols = parseCSVLine(line);
-    const account = cols[accIdx] || '';
-    const rawAmt  = cols[amtIdx] || '0';
-    const type    = typeIdx >= 0 ? (cols[typeIdx] || '') : '';
-    if (!account) continue;
-
-    // Parse amount: handles $, commas, parentheses for negatives
-    const amount = parseFloat(rawAmt.replace(/[$,\s]/g, '').replace(/^\((.+)\)$/, '-$1')) || 0;
-
-    if (!accountMap[account]) accountMap[account] = { name: account, type, sum: 0, count: 0 };
-    accountMap[account].sum += amount;
-    accountMap[account].count++;
-    txCount++;
+  const lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
+  if (lines.length<2) return {error:'File is too short.'};
+  const hdrs=parseCSVLine(lines[0]).map(h=>h.toLowerCase());
+  const ai=hdrs.findIndex(h=>h==='amount'||h.includes('amount')||h==='amt');
+  const ci=hdrs.findIndex(h=>h==='account'||h==='account name'||h.includes('account'));
+  const ti=hdrs.findIndex(h=>h==='account type'||h==='type'||h.includes('account type'));
+  if (ci===-1) return {error:'Couldn\'t find an "Account" column.'};
+  if (ai===-1) return {error:'Couldn\'t find an "Amount" column.'};
+  const map={}; let tx=0;
+  for (let i=1; i<lines.length; i++) {
+    const l=lines[i].trim(); if(!l) continue;
+    const cols=parseCSVLine(l);
+    const acct=cols[ci]||'', raw=cols[ai]||'0', type=ti>=0?(cols[ti]||')':'';
+    if(!acct) continue;
+    const amt=parseFloat(raw.replace(/[$,\s]/g,'').replace(/^\((.+)\)$/,'-$1'))||0;
+    if(!map[acct]) map[acct]={name:acct,type,sum:0,count:0};
+    map[acct].sum+=amt; map[acct].count++; tx++;
   }
-
-  if (Object.keys(accountMap).length === 0) return { error: 'No accounts found — check that rows have account names.' };
-  return { accounts: Object.values(accountMap), txCount };
+  if (!Object.keys(map).length) return {error:'No accounts found.'};
+  return {accounts:Object.values(map),txCount:tx};
 }
 
-function categorizeAccount(name, type) {
-  const t = (name + ' ' + type).toLowerCase();
+function categorizeAccount(name,type) {
+  const t=(name+' '+type).toLowerCase();
   if (/401[( ]?k|403[( ]?b|457|sep.?ira|simple.?ira|\bira\b|roth|retirement|pension/.test(t)) return 'retirement';
   if (/brokerage|invest|taxable|stock|etf|mutual.?fund|securities|portfolio/.test(t)) return 'investments';
-  if (/mortgage|home.?loan|heloc|home.?equity.?line/.test(t)) return 'debt';
-  if (/credit.?card|credit|auto.?loan|student.?loan|personal.?loan|line.?of.?credit/.test(t)) return 'debt';
+  if (/mortgage|home.?loan|heloc|home.?equity.?line|credit.?card|credit|auto.?loan|student.?loan|personal.?loan|line.?of.?credit/.test(t)) return 'debt';
   if (/home.?equity|property|real.?estate/.test(t)) return 'homeEquity';
-  return 'cash'; // checking, savings, HYSA, HSA, etc.
+  return 'cash';
 }
 
-const CATEGORIES = [
-  { key: 'cash',        label: 'Cash & savings',  isDebt: false },
-  { key: 'investments', label: 'Investments',      isDebt: false },
-  { key: 'retirement',  label: 'Retirement',       isDebt: false },
-  { key: 'homeEquity',  label: 'Home equity',      isDebt: false },
-  { key: 'debt',        label: 'Mortgage & debt',  isDebt: true  },
+const CATEGORIES=[
+  {key:'cash',        label:'Cash & savings',  isDebt:false},
+  {key:'investments', label:'Investments',      isDebt:false},
+  {key:'retirement',  label:'Retirement',       isDebt:false},
+  {key:'homeEquity',  label:'Home equity',      isDebt:false},
+  {key:'debt',        label:'Mortgage & debt',  isDebt:true },
 ];
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // SIMULATION ENGINE
-// ═══════════════════════════════════════════════════════════
-function fmt(n) {
-  if (n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
-  if (n >= 1e3) return '$' + Math.round(n/1e3) + 'k';
-  return '$' + Math.round(n);
-}
-
-function fmtComma(n) {
-  return Math.round(Math.abs(n)).toLocaleString();
-}
+// ═══════════════════════════════════════════════════
+function fmt(n) { if(n>=1e6) return '$'+(n/1e6).toFixed(2)+'M'; if(n>=1e3) return '$'+Math.round(n/1e3)+'k'; return '$'+Math.round(n); }
+function fmtComma(n) { return Math.round(Math.abs(n)).toLocaleString(); }
+function fmtMoney(n) { if(n>=1e6) return '$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M'; return '$'+Math.round(n).toLocaleString(); }
 
 function proj(p, nw0, startAge) {
-  nw0 = nw0 ?? 612400; startAge = startAge ?? 38;
-  const endAge = 95, mr = p.ret/100/12;
-  let bal = nw0; const arr = [nw0]; let atRetire = null, lasts = null;
-  const months = (endAge - startAge) * 12;
-  const retireM = Math.round((p.retireAge - startAge) * 12);
-  for (let m = 1; m <= months; m++) {
-    const age = startAge + m/12, retired = age > p.retireAge;
-    bal *= (1 + mr);
-    if (!retired) { let c = p.monthly; if (p.yearoff && age >= 43 && age < 44) c = 0; bal += c; }
-    else bal -= p.spend / 12;
-    if (m === 36 && p.house) bal -= 120000;
-    if (p.yearoff && m === 60) bal -= 50000;
-    if (p.college && (m===132||m===144||m===156||m===168)) bal -= 30000;
-    if (bal < 0) { bal = 0; if (lasts === null && retired) lasts = Math.round(age); }
-    if (m === retireM) atRetire = bal;
-    if (m % 12 === 0) arr.push(bal);
+  nw0=nw0??612400; startAge=startAge??38;
+  const endAge=95, mr=p.ret/100/12;
+  let bal=nw0; const arr=[nw0]; let atRetire=null, lasts=null;
+  const months=(endAge-startAge)*12, retireM=Math.round((p.retireAge-startAge)*12);
+  for (let m=1; m<=months; m++) {
+    const age=startAge+m/12, ret=age>p.retireAge;
+    bal*=(1+mr);
+    if (!ret) { let c=p.monthly; if(p.yearoff&&age>=43&&age<44) c=0; bal+=c; }
+    else bal-=p.spend/12;
+    if (m===36&&p.house) bal-=120000;
+    if (p.yearoff&&m===60) bal-=50000;
+    if (p.college&&(m===132||m===144||m===156||m===168)) bal-=30000;
+    if (bal<0) { bal=0; if(lasts===null&&ret) lasts=Math.round(age); }
+    if (m===retireM) atRetire=bal;
+    if (m%12===0) arr.push(bal);
   }
-  return { arr, atRetire: atRetire ?? bal, lasts, endVal: arr[arr.length-1] };
+  return {arr, atRetire:atRetire??bal, lasts, endVal:arr[arr.length-1]};
 }
 
 function makePath(arr, yMax) {
-  const x0=64, x1=956, y0=34, y1=250, n=arr.length-1;
-  const pts = arr.map((v,i) => [x0+(x1-x0)*i/n, y1-(y1-y0)*(v/yMax)]);
-  const line = 'M' + pts.map(p => p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
-  return { line, area: line+' L'+x1+','+y1+' L'+x0+','+y1+' Z', pts };
+  const x0=64,x1=956,y0=34,y1=250,n=arr.length-1;
+  const pts=arr.map((v,i)=>[x0+(x1-x0)*i/n, y1-(y1-y0)*(v/yMax)]);
+  const line='M'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
+  return {line, area:line+' L'+x1+','+y1+' L'+x0+','+y1+' Z', pts};
 }
 
 function mulberry32(a) { return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 function gauss(rng) { let u=0,v=0; while(!u)u=rng(); while(!v)v=rng(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
 
 function mc(p, nw0, startAge) {
-  nw0 = nw0 ?? 612400; startAge = startAge ?? 38;
-  const endAge=95, mean=p.ret/100, vol=0.12, infl=0.025, trials=1000;
-  const years=endAge-startAge, retY=p.retireAge-startAge;
+  nw0=nw0??612400; startAge=startAge??38;
+  const endAge=95,mean=p.ret/100,vol=0.12,infl=0.025,trials=1000;
+  const years=endAge-startAge,retY=p.retireAge-startAge;
   const rng=mulberry32(987654321);
-  const cols=Array.from({length:years+1},()=>[]);
-  let success=0;
+  const cols=Array.from({length:years+1},()=>[]); let success=0;
   for (let t=0; t<trials; t++) {
-    let bal=nw0, ok=true; cols[0].push(bal);
+    let bal=nw0,ok=true; cols[0].push(bal);
     for (let y=1; y<=years; y++) {
-      bal *= (1+mean+vol*gauss(rng));
-      if (y<=retY) { let c=p.monthly*12; if(p.yearoff&&y===5)c=0; bal+=c; }
-      else bal -= p.spend*Math.pow(1+infl,y-retY);
-      if (p.house&&y===3) bal-=120000;
-      if (p.yearoff&&y===5) bal-=50000;
-      if (p.college&&(y===11||y===12||y===13||y===14)) bal-=30000;
-      if (bal<=0) { bal=0; if(y>retY)ok=false; }
+      bal*=(1+mean+vol*gauss(rng));
+      if(y<=retY){let c=p.monthly*12;if(p.yearoff&&y===5)c=0;bal+=c;}
+      else bal-=p.spend*Math.pow(1+infl,y-retY);
+      if(p.house&&y===3)bal-=120000;
+      if(p.yearoff&&y===5)bal-=50000;
+      if(p.college&&(y===11||y===12||y===13||y===14))bal-=30000;
+      if(bal<=0){bal=0;if(y>retY)ok=false;}
       cols[y].push(bal);
     }
-    if (ok) success++;
+    if(ok)success++;
   }
-  const pct=(arr,q)=>{ const a=arr.slice().sort((x,y)=>x-y); return a[Math.floor(q*(a.length-1))]; };
-  return { p10:cols.map(c=>pct(c,.1)), p50:cols.map(c=>pct(c,.5)), p90:cols.map(c=>pct(c,.9)), success:success/trials };
+  const pct=(arr,q)=>{const a=arr.slice().sort((x,y)=>x-y);return a[Math.floor(q*(a.length-1))];};
+  return {p10:cols.map(c=>pct(c,.1)),p50:cols.map(c=>pct(c,.5)),p90:cols.map(c=>pct(c,.9)),success:success/trials};
 }
 
 function modelResult(s, atRetire, cur, mcData) {
   const f=fmt;
-  if (s.model==='4pct') {
-    const safe=0.04*atRetire, fits=s.spend<=safe;
-    return { mLabel:'Safe annual income', mBig:f(safe), mSub:f(safe/12)+'/mo, rising with inflation',
-      mNote: fits?('Your '+f(s.spend)+'/yr target fits with '+f(safe-s.spend)+'/yr to spare.')
-                 :('Your '+f(s.spend)+'/yr target is '+f(s.spend-safe)+' over the safe draw — trim spending or work longer.'),
-      mNoteColor:fits?'#5e7a52':'#9a5a4a', mFine:'Bengen 4% rule · Trinity Study · 30-yr horizon' };
-  }
-  if (s.model==='25x') {
-    const target=25*s.spend; let ageHit=null;
-    cur.arr.forEach((v,i)=>{ if(ageHit===null&&v>=target)ageHit=38+i; });
-    const surplus=atRetire-target;
-    return { mLabel:'Your financial-independence number', mBig:f(target),
-      mSub:ageHit?('reached around age '+ageHit):'not reached by 95 at this pace',
-      mNote:surplus>=0?('At retirement you\'re '+f(surplus)+' above your 25× number.'):(f(-surplus)+' short of your 25× number at retirement.'),
-      mNoteColor:surplus>=0?'#5e7a52':'#9a5a4a', mFine:'25× rule · the inverse of a 4% withdrawal' };
-  }
-  if (s.model==='guard') {
-    const hi=0.054*atRetire, lo=0.04*atRetire;
-    return { mLabel:'Flexible spending range', mBig:f(hi/12)+'–'+f(lo/12)+'/mo', mSub:'start near '+f(hi/12)+'/mo',
-      mNote:'Guardrails let you start higher, then cut ~10% after a poor year and raise after a strong one — historically lifts success toward ~95%.',
-      mNoteColor:'#5e7a52', mFine:'Guyton-Klinger guardrails · dynamic withdrawal' };
-  }
+  if(s.model==='4pct'){const safe=0.04*atRetire,fits=s.spend<=safe;return{mLabel:'Safe annual income',mBig:f(safe),mSub:f(safe/12)+'/mo, rising with inflation',mNote:fits?('Your '+f(s.spend)+'/yr target fits with '+f(safe-s.spend)+'/yr to spare.'):('Your '+f(s.spend)+'/yr target is '+f(s.spend-safe)+' over the safe draw — trim spending or work longer.'),mNoteColor:fits?'#5e7a52':'#9a5a4a',mFine:'Bengen 4% rule · Trinity Study · 30-yr horizon'};}
+  if(s.model==='25x'){const target=25*s.spend;let ageHit=null;cur.arr.forEach((v,i)=>{if(ageHit===null&&v>=target)ageHit=38+i;});const surplus=atRetire-target;return{mLabel:'Your financial-independence number',mBig:f(target),mSub:ageHit?('reached around age '+ageHit):'not reached by 95 at this pace',mNote:surplus>=0?('At retirement you\'re '+f(surplus)+' above your 25× number.'):(f(-surplus)+' short of your 25× number at retirement.'),mNoteColor:surplus>=0?'#5e7a52':'#9a5a4a',mFine:'25× rule · the inverse of a 4% withdrawal'};}
+  if(s.model==='guard'){const hi=0.054*atRetire,lo=0.04*atRetire;return{mLabel:'Flexible spending range',mBig:f(hi/12)+'–'+f(lo/12)+'/mo',mSub:'start near '+f(hi/12)+'/mo',mNote:'Guardrails let you start higher, then cut ~10% after a poor year and raise after a strong one — historically lifts success toward ~95%.',mNoteColor:'#5e7a52',mFine:'Guyton-Klinger guardrails · dynamic withdrawal'};}
   const rate=mcData?Math.round(mcData.success*100):0;
-  return { mLabel:'Chance the plan lasts to 95', mBig:rate+'%', mSub:'across 1,000 simulated markets',
-    mNote:rate>=85?('Strong — spending held up in '+rate+'% of markets, including poor early returns.')
-        :rate>=70?('Workable, but '+(100-rate)+'% of paths ran short. Guardrails or a later start would help.')
-        :('Fragile — '+(100-rate)+'% of paths ran out. Trim spending, save more, or delay retirement.'),
-    mNoteColor:rate>=85?'#5e7a52':rate>=70?'#7a6a4a':'#9a5a4a',
-    mFine:'Monte Carlo · 12% volatility · 2.5% inflation' };
+  return{mLabel:'Chance the plan lasts to 95',mBig:rate+'%',mSub:'across 1,000 simulated markets',mNote:rate>=85?('Strong — spending held up in '+rate+'% of markets.'):rate>=70?('Workable, but '+(100-rate)+'% of paths ran short. Guardrails or a later start would help.'):('Fragile — '+(100-rate)+'% of paths ran out. Trim spending, save more, or delay retirement.'),mNoteColor:rate>=85?'#5e7a52':rate>=70?'#7a6a4a':'#9a5a4a',mFine:'Monte Carlo · 12% volatility · 2.5% inflation'};
 }
 
 function computeRisks(s, atRetire) {
   const out=[];
   const wr=atRetire>0?s.spend/atRetire:1;
-  if (wr>0.04) out.push({t:'Withdrawal rate above 4%',b:'You\'re drawing '+(wr*100).toFixed(1)+'% at retirement. Sustained rates over ~4% sharply raise the odds of running short.',sev:'high'});
-  if (s.retireAge<65) out.push({t:'Health coverage before Medicare',b:'Retiring at '+s.retireAge+' leaves '+(65-s.retireAge)+' yr'+(65-s.retireAge>1?'s':'')+' before Medicare — budget roughly $1.5k/mo for private coverage.',sev:'high'});
-  if (s.retireAge<62) out.push({t:'Sequence-of-returns risk',b:'A downturn in your first few retirement years does outsized damage. Retiring early amplifies it.',sev:'med'});
-  if (s.ret>7) out.push({t:'Optimistic return assumption',b:'You\'re modeling '+s.ret.toFixed(1)+'%. Most planners use 5–6% to stay conservative on long horizons.',sev:'med'});
-  if (s.spend>150000) out.push({t:'High spending baseline',b:'A '+fmt(s.spend)+'/yr lifestyle demands a large nest egg — small trims compound enormously.',sev:'med'});
+  if(wr>0.04)out.push({t:'Withdrawal rate above 4%',b:'You\'re drawing '+(wr*100).toFixed(1)+'% at retirement. Sustained rates over ~4% sharply raise the odds of running short.',sev:'high'});
+  if(s.retireAge<65)out.push({t:'Health coverage before Medicare',b:'Retiring at '+s.retireAge+' leaves '+(65-s.retireAge)+' yr'+(65-s.retireAge>1?'s':'')+' before Medicare — budget roughly $1.5k/mo for private coverage.',sev:'high'});
+  if(s.retireAge<62)out.push({t:'Sequence-of-returns risk',b:'A downturn in your first few retirement years does outsized damage. Retiring early amplifies it.',sev:'med'});
+  if(s.ret>7)out.push({t:'Optimistic return assumption',b:'You\'re modeling '+s.ret.toFixed(1)+'%. Most planners use 5–6% to stay conservative on long horizons.',sev:'med'});
+  if(s.spend>150000)out.push({t:'High spending baseline',b:'A '+fmt(s.spend)+'/yr lifestyle demands a large nest egg — small trims compound enormously.',sev:'med'});
   out.push({t:'Inflation drift',b:'This plan assumes ~2.5% inflation. Healthcare and housing have historically outpaced that.',sev:'low'});
-  out.push({t:'Social Security not modeled',b:'Benefits could add ~$45k/yr combined. Excluding them, your projection likely understates real income.',sev:'low'});
+  out.push({t:'Social Security not modeled',b:'Benefits could add ~$45k/yr combined. Excluding them understates real income.',sev:'low'});
   out.push({t:'Longevity',b:'A healthy couple at your age has a ~50% chance one of you reaches 90. Planning only to then is tight.',sev:'low'});
   return out.slice(0,4);
 }
 
-// ═══════════════════════════════════════════════════════════
-// LAB RENDER
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════
 function render() {
-  const s = state;
-  const isMc = s.model === 'mc';
-  const nw0 = netWorth();
-  const age = s.userAge || 38;
-  const accts = s.demoMode ? DEMO_ACCOUNTS : (s.accountData || DEMO_ACCOUNTS);
+  const s=state, isMc=s.model==='mc';
+  const nw0=netWorth(), age=s.userAge||38;
+  const accts=s.demoMode?DEMO_ACCOUNTS:(s.accountData||DEMO_ACCOUNTS);
+  const cur=proj(s,nw0,age);
+  const base=proj({retireAge:65,monthly:4300,ret:6,spend:132000,house:false,college:false,yearoff:false},nw0,age);
+  const mcData=isMc?mc(s,nw0,age):null;
+  const yMax=isMc?Math.max(...mcData.p90,cur.atRetire)*1.06:Math.max(...cur.arr,...base.arr)*1.08;
+  const c=makePath(cur.arr,yMax), b=makePath(base.arr,yMax);
+  const retireX=(64+(956-64)*((s.retireAge-age)/(95-age))).toFixed(1);
+  const retireY=(250-(250-34)*(cur.atRetire/yMax)).toFixed(1);
 
-  const cur  = proj(s, nw0, age);
-  const base = proj({ retireAge:65, monthly:4300, ret:6, spend:132000, house:false, college:false, yearoff:false }, nw0, age);
-  const mcData = isMc ? mc(s, nw0, age) : null;
-
-  // Chart
-  const yMax = isMc ? Math.max(...mcData.p90, cur.atRetire)*1.06 : Math.max(...cur.arr, ...base.arr)*1.08;
-  const c = makePath(cur.arr, yMax), b = makePath(base.arr, yMax);
-  const retireX = (64+(956-64)*((s.retireAge-age)/(95-age))).toFixed(1);
-  const retireY = (250-(250-34)*(cur.atRetire/yMax)).toFixed(1);
-
-  if (isMc) {
-    const p10=makePath(mcData.p10,yMax), p50=makePath(mcData.p50,yMax), p90=makePath(mcData.p90,yMax);
-    const band='M'+p90.pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')
-      +' L'+p10.pts.slice().reverse().map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')+' Z';
-    $('chart-band').setAttribute('d', band);
-    $('chart-primary').setAttribute('d', p50.line);
-    $('chart-area').setAttribute('d', '');
-    $('chart-base').setAttribute('d', '');
-    $('legend-det').style.display = 'none';
-    $('legend-mc').style.display  = 'flex';
+  if(isMc){
+    const p10=makePath(mcData.p10,yMax),p50=makePath(mcData.p50,yMax),p90=makePath(mcData.p90,yMax);
+    const band='M'+p90.pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')+' L'+p10.pts.slice().reverse().map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')+' Z';
+    $('chart-band').setAttribute('d',band);$('chart-primary').setAttribute('d',p50.line);
+    $('chart-area').setAttribute('d','');$('chart-base').setAttribute('d','');
+    $('legend-det').style.display='none';$('legend-mc').style.display='flex';
   } else {
-    $('chart-band').setAttribute('d', '');
-    $('chart-primary').setAttribute('d', c.line);
-    $('chart-area').setAttribute('d', c.area);
-    $('chart-base').setAttribute('d', b.line);
-    $('legend-det').style.display = 'flex';
-    $('legend-mc').style.display  = 'none';
+    $('chart-band').setAttribute('d','');$('chart-primary').setAttribute('d',c.line);
+    $('chart-area').setAttribute('d',c.area);$('chart-base').setAttribute('d',b.line);
+    $('legend-det').style.display='flex';$('legend-mc').style.display='none';
   }
-  $('retire-line').setAttribute('x1', retireX); $('retire-line').setAttribute('x2', retireX);
-  $('retire-dot').setAttribute('cx', retireX);  $('retire-dot').setAttribute('cy', retireY);
-  $('x-today').textContent = 'Today · ' + age;
+  $('retire-line').setAttribute('x1',retireX);$('retire-line').setAttribute('x2',retireX);
+  $('retire-dot').setAttribute('cx',retireX);$('retire-dot').setAttribute('cy',retireY);
+  $('x-today').textContent='Today · '+age;
 
-  // Model result
-  const m = modelResult(s, cur.atRetire, cur, mcData);
-  $('m-label').textContent = m.mLabel; $('m-big').textContent = m.mBig; $('m-sub').textContent = m.mSub;
-  $('m-note').textContent = m.mNote; $('m-note').style.color = m.mNoteColor; $('m-fine').textContent = m.mFine;
+  const m=modelResult(s,cur.atRetire,cur,mcData);
+  $('m-label').textContent=m.mLabel;$('m-big').textContent=m.mBig;$('m-sub').textContent=m.mSub;
+  $('m-note').textContent=m.mNote;$('m-note').style.color=m.mNoteColor;$('m-fine').textContent=m.mFine;
+  $('val-retire').textContent=s.retireAge;
+  $('val-monthly').textContent='$'+s.monthly.toLocaleString();
+  $('val-ret').textContent=s.ret.toFixed(1)+'%';
+  $('val-spend').textContent='$'+Math.round(s.spend/12).toLocaleString()+'/mo';
+  document.querySelectorAll('.model-card').forEach(el=>el.classList.toggle('active',el.dataset.model===s.model));
+  $('pill-house').classList.toggle('active',s.house);
+  $('pill-college').classList.toggle('active',s.college);
+  $('pill-yearoff').classList.toggle('active',s.yearoff);
 
-  // Sliders
-  $('val-retire').textContent  = s.retireAge;
-  $('val-monthly').textContent = '$' + s.monthly.toLocaleString();
-  $('val-ret').textContent     = s.ret.toFixed(1) + '%';
-  $('val-spend').textContent   = '$' + Math.round(s.spend/12).toLocaleString() + '/mo';
-
-  document.querySelectorAll('.model-card').forEach(el => el.classList.toggle('active', el.dataset.model === s.model));
-  $('pill-house').classList.toggle('active', s.house);
-  $('pill-college').classList.toggle('active', s.college);
-  $('pill-yearoff').classList.toggle('active', s.yearoff);
-
-  // Accounts panel
-  const rows = [
-    { label: accts.cash.label,        sub: accts.cash.sub,        val: accts.cash.value,        isDebt: false },
-    { label: accts.investments.label, sub: accts.investments.sub, val: accts.investments.value, isDebt: false },
-    { label: accts.retirement.label,  sub: accts.retirement.sub,  val: accts.retirement.value,  isDebt: false },
-    { label: accts.homeEquity.label,  sub: accts.homeEquity.sub,  val: accts.homeEquity.value,  isDebt: false },
-    { label: accts.debt.label,        sub: accts.debt.sub,        val: accts.debt.value,        isDebt: true  },
+  const rows=[
+    {label:accts.cash.label,       sub:accts.cash.sub,        val:accts.cash.value,       isDebt:false},
+    {label:accts.investments.label,sub:accts.investments.sub, val:accts.investments.value,isDebt:false},
+    {label:accts.retirement.label, sub:accts.retirement.sub,  val:accts.retirement.value, isDebt:false},
+    {label:accts.homeEquity.label, sub:accts.homeEquity.sub,  val:accts.homeEquity.value, isDebt:false},
+    {label:accts.debt.label,       sub:accts.debt.sub,        val:accts.debt.value,       isDebt:true },
   ];
-  $('lab-account-rows').innerHTML = rows.map(r => `
-    <div class="account-row">
-      <div class="account-row-main${r.isDebt?' caution':''}">
-        <span>${r.label}</span>
-        <span>${r.isDebt?'−':''}${fmtMoney(Math.abs(r.val))}</span>
-      </div>
-      ${r.sub ? `<div class="account-row-sub">${r.sub}</div>` : ''}
-    </div>
-  `).join('');
-  $('lab-nw').textContent = fmtMoney(nw0);
+  $('lab-account-rows').innerHTML=rows.map(r=>`<div class="account-row"><div class="account-row-main${r.isDebt?' caution':''}"><span>${r.label}</span><span>${r.isDebt?'−':''}${fmtMoney(Math.abs(r.val))}</span></div>${r.sub?`<div class="account-row-sub">${r.sub}</div>`:''}</div>`).join('');
+  $('lab-nw').textContent=fmtMoney(nw0);
+  const src=s.demoMode?'DEMO DATA':(s.connSource&&PROV_MAP[s.connSource]?PROV_MAP[s.connSource].name.toUpperCase():'YOUR DATA');
+  const acctCount=s.demoMode?6:Object.values(accts).filter(a=>a.value!==0).length;
+  $('source-badge').textContent=src+' · '+acctCount+' ACCOUNTS';
+  $('lab-household-name').textContent=s.demoMode?'The Rivera household':'Your household';
 
-  // Source badge
-  const src = s.demoMode ? 'DEMO DATA'
-    : (s.connSource && PROV_MAP[s.connSource] ? PROV_MAP[s.connSource].name.toUpperCase() : 'YOUR DATA');
-  const acctCount = s.demoMode ? 6 : Object.values(accts).filter(a => a.value !== 0).length;
-  $('source-badge').textContent = src + ' · ' + acctCount + ' ACCOUNTS';
-  $('lab-household-name').textContent = s.demoMode ? 'The Rivera household' : 'Your household';
-
-  // Risks
-  const sevMap = {
-    high: { dot:'#9a5a4a', tag:'Watch closely', tagColor:'#9a5a4a' },
-    med:  { dot:'#b0823a', tag:'Consider',      tagColor:'#8a6a2e' },
-    low:  { dot:'#a39a87', tag:'Keep in mind',  tagColor:'#a39a87' },
-  };
-  const risks = computeRisks(s, cur.atRetire);
-  $('risks-grid').innerHTML = risks.map(r => {
-    const sv = sevMap[r.sev];
-    return `<div class="risk-card">
-      <div class="risk-top"><span class="risk-dot" style="background:${sv.dot}"></span><span class="risk-tag" style="color:${sv.tagColor}">${sv.tag}</span></div>
-      <div class="risk-title">${r.t}</div>
-      <div class="risk-body">${r.b}</div>
-    </div>`;
-  }).join('');
+  const sevMap={high:{dot:'#9a5a4a',tag:'Watch closely',tagColor:'#9a5a4a'},med:{dot:'#b0823a',tag:'Consider',tagColor:'#8a6a2e'},low:{dot:'#a39a87',tag:'Keep in mind',tagColor:'#a39a87'}};
+  const risks=computeRisks(s,cur.atRetire);
+  $('risks-grid').innerHTML=risks.map(r=>{const sv=sevMap[r.sev];return`<div class="risk-card"><div class="risk-top"><span class="risk-dot" style="background:${sv.dot}"></span><span class="risk-tag" style="color:${sv.tagColor}">${sv.tag}</span></div><div class="risk-title">${r.t}</div><div class="risk-body">${r.b}</div></div>`;}).join('');
 }
 
-function fmtMoney(n) {
-  if (n >= 1e6) return '$' + (n/1e6).toFixed(2).replace(/\.?0+$/, '') + 'M';
-  return '$' + Math.round(n).toLocaleString();
+// ═══════════════════════════════════════════════════
+// API CLIENT
+// ═══════════════════════════════════════════════════
+async function api(method, path, body) {
+  const headers={'Content-Type':'application/json'};
+  if(authToken) headers['Authorization']='Bearer '+authToken;
+  const res=await fetch(API_BASE+path,{method,headers,body:body?JSON.stringify(body):undefined});
+  if(res.status===204) return null;
+  const data=await res.json().catch(()=>({detail:'Unexpected error'}));
+  if(!res.ok){if(res.status===401)clearAuth();throw new Error(data.detail||'Request failed');}
+  return data;
+}
+function clearAuth(){authToken=null;currentPlanId=null;localStorage.removeItem('auth-token');localStorage.removeItem('current-plan-id');}
+
+// ═══════════════════════════════════════════════════
+// AUTH FLOWS
+// ═══════════════════════════════════════════════════
+async function handleLogin(){
+  const email=$('login-email').value.trim(), pass=$('login-password').value, errEl=$('login-error');
+  errEl.style.display='none'; $('login-btn').textContent='Logging in…'; $('login-btn').disabled=true;
+  try {
+    const data=await api('POST','/auth/login',{email,password:pass});
+    authToken=data.access_token; localStorage.setItem('auth-token',authToken); authEmail=email;
+    await afterLogin();
+  } catch(e){ errEl.textContent=e.message; errEl.style.display='block'; }
+  finally { $('login-btn').textContent='Log in'; $('login-btn').disabled=false; }
 }
 
-// ═══════════════════════════════════════════════════════════
-// PERSISTENCE
-// ═══════════════════════════════════════════════════════════
-const STORAGE_KEY = 'planner-v1';
-const MODEL_LABELS = { '4pct':'4% Rule', '25x':'25× Number', 'guard':'Guardrails', 'mc':'Monte Carlo' };
-
-let saveTimer = null;
-function saveState() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        retireAge: state.retireAge, monthly: state.monthly,
-        ret: state.ret, spend: state.spend,
-        house: state.house, college: state.college, yearoff: state.yearoff,
-        model: state.model, userAge: state.userAge,
-        accountData: state.accountData, connSource: state.connSource,
-        demoMode: state.demoMode,
-      }));
-      flashSaved();
-    } catch(e) {}
-  }, 400);
+async function afterLogin(){
+  try {
+    const plans=await api('GET','/plans');
+    if(plans.length>0){
+      const r=plans[0]; currentPlanId=r.id; currentPlanName=r.name;
+      localStorage.setItem('current-plan-id',currentPlanId);
+      Object.assign(state,JSON.parse(r.state_json||'{}'));
+      updatePlanBar(r.name); showResume(state); showScreen('screen-connect'); return;
+    }
+  } catch(e){}
+  showScreen('screen-connect'); showStage('stage-choose');
 }
 
-function loadSavedState() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) { return null; }
+async function handleSignup(){
+  const email=$('signup-email').value.trim(), pass=$('signup-password').value, errEl=$('signup-error');
+  errEl.style.display='none'; $('signup-btn').textContent='Creating account…'; $('signup-btn').disabled=true;
+  try {
+    await api('POST','/auth/signup',{email,password:pass});
+    authEmail=email; $('verify-email-display').textContent=email; showStage('stage-verify-pending');
+  } catch(e){ errEl.textContent=e.message; errEl.style.display='block'; }
+  finally { $('signup-btn').textContent='Create account →'; $('signup-btn').disabled=false; }
 }
 
-function clearSavedState() {
-  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+async function handleVerifyToken(token){
+  try { await api('GET','/auth/verify/'+token); return true; }
+  catch(e){ showToast(e.message||'Verification failed.'); return false; }
 }
 
-let savedFadeTimer = null;
-function flashSaved() {
-  const badge = $('saved-badge');
-  if (!badge) return;
-  badge.classList.add('show');
-  clearTimeout(savedFadeTimer);
-  savedFadeTimer = setTimeout(() => badge.classList.remove('show'), 2000);
+async function handleResend(){
+  const email=authEmail||$('verify-email-display').textContent;
+  const pass=$('signup-password').value;
+  try { await api('POST','/auth/resend-verification',{email,password:pass||''}); showToast('Verification email sent.'); }
+  catch(e){ showToast(e.message||'Could not resend.'); }
 }
 
-function showResume(saved) {
-  // Restore state
-  Object.assign(state, saved);
-  const nw = netWorth();
-  const srcName = state.demoMode ? 'Demo data'
-    : (state.connSource && PROV_MAP[state.connSource] ? PROV_MAP[state.connSource].name : 'Manual entry');
-
-  $('resume-nw').textContent = fmtMoney(Math.abs(nw));
-  $('resume-nw-label').textContent = nw < 0 ? 'net worth (negative)' : 'net worth';
-  $('resume-source-line').textContent = 'Last saved · ' + srcName;
-  $('resume-retire').textContent = state.retireAge;
-  $('resume-monthly').textContent = '$' + state.monthly.toLocaleString();
-  $('resume-model').textContent = MODEL_LABELS[state.model] || state.model;
-  $('resume-spend').textContent = fmt(state.spend);
-
-  showStage('stage-resume');
+// ═══════════════════════════════════════════════════
+// PLAN MANAGEMENT
+// ═══════════════════════════════════════════════════
+function planStateJSON(){
+  return JSON.stringify({retireAge:state.retireAge,monthly:state.monthly,ret:state.ret,spend:state.spend,house:state.house,college:state.college,yearoff:state.yearoff,model:state.model,userAge:state.userAge,accountData:state.accountData,connSource:state.connSource,demoMode:state.demoMode});
 }
 
-// ═══════════════════════════════════════════════════════════
-// STAGE MANAGEMENT
-// ═══════════════════════════════════════════════════════════
-function showStage(id) {
-  document.querySelectorAll('.stage').forEach(s => { s.style.display='none'; s.classList.remove('active'); });
-  const el = $(id);
-  if (el) { el.style.display = 'block'; el.classList.add('active'); }
+async function createPlan(name){
+  try {
+    const plan=await api('POST','/plans',{name,state_json:planStateJSON()});
+    currentPlanId=plan.id; currentPlanName=plan.name;
+    localStorage.setItem('current-plan-id',currentPlanId); updatePlanBar(plan.name); return plan;
+  } catch(e){ return null; }
 }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $(id).classList.add('active');
-  $('back-btn').style.display = id === 'screen-lab' ? 'block' : 'none';
+let saveTimer=null, savePending=false;
+function scheduleSave(){clearTimeout(saveTimer);setSaveStatus('saving');savePending=true;saveTimer=setTimeout(doSave,1800);}
+
+async function doSave(){
+  if(!savePending) return; savePending=false;
+  try {
+    if(isShareMode&&shareToken) await api('PUT','/share/'+shareToken,{state_json:planStateJSON()});
+    else if(currentPlanId) await api('PUT','/plans/'+currentPlanId,{state_json:planStateJSON()});
+    else return;
+    setSaveStatus('saved'); flashSaved();
+  } catch(e){ setSaveStatus('error'); }
 }
 
-// ═══════════════════════════════════════════════════════════
-// CONNECT FLOW
-// ═══════════════════════════════════════════════════════════
-function renderProviders() {
-  $('provider-grid').innerHTML = PROVIDERS.map(p => `
-    <div class="provider-tile${!p.active?' disabled':''}${state.connSource===p.key?' selected':''}" data-key="${p.key}" ${p.active?'':'tabindex="-1"'}>
-      <div class="provider-dot" style="background:${p.bg}">${p.initial}</div>
-      <div class="provider-name">${p.name}</div>
-      ${!p.active ? '<span class="provider-soon">Soon</span>' : ''}
-    </div>
-  `).join('');
-  $('provider-grid').querySelectorAll('.provider-tile:not(.disabled)').forEach(tile => {
-    tile.addEventListener('click', () => {
-      state.connSource = tile.dataset.key;
-      renderProviders();
-      updateConnectBtn();
+function setSaveStatus(s){
+  const el=$('plan-save-status'); if(!el) return;
+  if(s==='saving'){el.textContent='Saving…';el.style.color='var(--faintest)';}
+  else if(s==='saved'){el.textContent='Saved';el.style.color='var(--sage)';}
+  else if(s==='error'){el.textContent='Not saved';el.style.color='var(--caution)';}
+  else el.textContent='';
+}
+
+function updatePlanBar(name){currentPlanName=name||'My plan';const el=$('plan-name-display');if(el)el.textContent=currentPlanName;}
+
+function setupSharePlanBar(){
+  updatePlanBar('Shared plan');
+  const caret=document.querySelector('.plan-name-caret');if(caret)caret.style.display='none';
+  const btn=$('plan-name-btn');if(btn)btn.style.cursor='default';
+  const right=$('plan-bar-right');if(right)right.innerHTML='<span style="font-size:12.5px;color:var(--faint)">Shared plan · changes auto-save</span>';
+}
+
+function showPlanDropdown(){
+  const rect=$('plan-name-btn').getBoundingClientRect(), dd=$('plan-dropdown');
+  dd.style.top=(rect.bottom+6)+'px'; dd.style.left=rect.left+'px'; dd.style.display='block';
+  loadPlansDropdown();
+}
+function hidePlanDropdown(){$('plan-dropdown').style.display='none';}
+
+async function loadPlansDropdown(){
+  const listEl=$('plan-list');
+  listEl.innerHTML='<div style="padding:12px 14px;font-size:12.5px;color:var(--faint)">Loading…</div>';
+  try {
+    const plans=await api('GET','/plans');
+    if(!plans.length){listEl.innerHTML='<div style="padding:12px 14px;font-size:12.5px;color:var(--faint)">No saved plans.</div>';return;}
+    listEl.innerHTML=plans.map(p=>{
+      const isActive=p.id===currentPlanId;
+      const date=new Date(p.updated_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      return`<div class="plan-dropdown-item${isActive?' active-plan':''}" data-id="${p.id}" data-name="${p.name}"><div class="plan-item-info"><div class="plan-item-name">${p.name}</div><div class="plan-item-date">${date}</div></div>${isActive?'<span class="plan-item-check">✓</span>':''}<button class="plan-item-delete" data-id="${p.id}" title="Delete">×</button></div>`;
+    }).join('');
+    listEl.querySelectorAll('.plan-dropdown-item').forEach(el=>{
+      el.addEventListener('click',async e=>{
+        if(e.target.classList.contains('plan-item-delete')){e.stopPropagation();await deletePlan(e.target.dataset.id);return;}
+        hidePlanDropdown(); await switchPlan(el.dataset.id,el.dataset.name);
+      });
     });
+  } catch(e){ listEl.innerHTML='<div style="padding:12px 14px;font-size:12.5px;color:var(--caution)">Could not load plans.</div>'; }
+}
+
+async function switchPlan(planId,planName){
+  try {
+    const plan=await api('GET','/plans/'+planId);
+    Object.assign(state,{retireAge:65,monthly:4300,ret:6,spend:132000,house:false,college:false,yearoff:false,model:'4pct',connSource:null,demoMode:false,userAge:38,accountData:null});
+    Object.assign(state,JSON.parse(plan.state_json||'{}'));
+    currentPlanId=planId; currentPlanName=planName;
+    localStorage.setItem('current-plan-id',currentPlanId);
+    updatePlanBar(planName); setSaveStatus('saved'); render();
+  } catch(e){ showToast('Could not load that plan.'); }
+}
+
+async function deletePlan(planId){
+  if(!confirm('Delete this plan? This cannot be undone.')) return;
+  try {
+    await api('DELETE','/plans/'+planId);
+    if(planId===currentPlanId){currentPlanId=null;currentPlanName='My plan';localStorage.removeItem('current-plan-id');updatePlanBar('My plan');}
+    loadPlansDropdown();
+  } catch(e){ showToast('Could not delete plan.'); }
+}
+
+async function openShareModal(){
+  if(!currentPlanId){showToast('Save a plan first.');return;}
+  $('share-modal').style.display='flex';
+  $('share-url-input').value='Generating link…';
+  $('share-copy-btn').textContent='Copy link'; $('share-copy-btn').className='share-copy-btn';
+  try {
+    const data=await api('POST','/plans/'+currentPlanId+'/share');
+    $('share-url-input').value=data.share_url;
+  } catch(e){ $('share-url-input').value='Error generating link'; }
+}
+
+// ═══════════════════════════════════════════════════
+// STAGE / SCREEN / TOAST
+// ═══════════════════════════════════════════════════
+function $(id){return document.getElementById(id);}
+
+function showStage(id){
+  document.querySelectorAll('.stage').forEach(s=>{s.style.display='none';s.classList.remove('active');});
+  const el=$(id); if(el){el.style.display='block';el.classList.add('active');}
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+  $('back-btn').style.display=id==='screen-lab'?'block':'none';
+}
+
+let toastTimer=null;
+function showToast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3500);}
+
+let savedFadeTimer=null;
+function flashSaved(){const b=$('saved-badge');if(!b)return;b.classList.add('show');clearTimeout(savedFadeTimer);savedFadeTimer=setTimeout(()=>b.classList.remove('show'),2000);}
+
+// ═══════════════════════════════════════════════════
+// CONNECT FLOW
+// ═══════════════════════════════════════════════════
+const MODEL_LABELS={'4pct':'4% Rule','25x':'25× Number','guard':'Guardrails','mc':'Monte Carlo'};
+
+function renderProviders(){
+  $('provider-grid').innerHTML=PROVIDERS.map(p=>`<div class="provider-tile${!p.active?' disabled':''}${state.connSource===p.key?' selected':''}" data-key="${p.key}" ${p.active?'':'tabindex="-1"'}><div class="provider-dot" style="background:${p.bg}">${p.initial}</div><div class="provider-name">${p.name}</div>${!p.active?'<span class="provider-soon">Soon</span>':''}</div>`).join('');
+  $('provider-grid').querySelectorAll('.provider-tile:not(.disabled)').forEach(tile=>{
+    tile.addEventListener('click',()=>{state.connSource=tile.dataset.key;renderProviders();updateConnectBtn();});
   });
 }
 
-function updateConnectBtn() {
-  const btn = $('connect-btn'), has = !!state.connSource;
-  btn.className = 'connect-btn ' + (has ? 'enabled' : 'disabled');
-  btn.textContent = has ? ('Securely connect ' + PROV_MAP[state.connSource].name) : 'Choose a source above';
+function updateConnectBtn(){
+  const btn=$('connect-btn'),has=!!state.connSource;
+  btn.className='connect-btn '+(has?'enabled':'disabled');
+  btn.textContent=has?('Securely connect '+PROV_MAP[state.connSource].name):'Choose a source above';
 }
 
-function goToUpload() {
-  const info = getExportInfo(state.connSource);
-  const prov = PROV_MAP[state.connSource];
-
-  $('upload-prov-dot').style.background = prov.bg;
-  $('upload-prov-dot').textContent = prov.initial;
-  $('upload-headline').textContent = info.headline;
-  $('upload-sub').textContent = info.sub;
-
-  $('export-steps').innerHTML = '<div class="export-steps-title">How to export your data</div>'
-    + info.steps.map((s,i) => `<div class="export-step"><span class="step-num">${i+1}</span><span>${s}</span></div>`).join('');
-
-  // Reset dropzone
-  $('csv-file-input').value = '';
-  $('dropzone-filename').style.display = 'none';
-  $('dropzone-filename').textContent = '';
-  state.csvAccountMap = null;
-
+function goToUpload(){
+  const info=getExportInfo(state.connSource), prov=PROV_MAP[state.connSource];
+  $('upload-prov-dot').style.background=prov.bg; $('upload-prov-dot').textContent=prov.initial;
+  $('upload-headline').textContent=info.headline; $('upload-sub').textContent=info.sub;
+  $('export-steps').innerHTML='<div class="export-steps-title">How to export your data</div>'+info.steps.map((s,i)=>`<div class="export-step"><span class="step-num">${i+1}</span><span>${s}</span></div>`).join('');
+  $('csv-file-input').value=''; $('dropzone-filename').style.display='none'; state.csvAccountMap=null;
   showStage('stage-csv-upload');
 }
 
-function goToReview(csvResult) {
-  // Build account map from CSV or empty
-  const catMap = { cash:[], investments:[], retirement:[], homeEquity:[], debt:[] };
-
-  if (csvResult && csvResult.accounts) {
-    csvResult.accounts.forEach(acct => {
-      const cat = categorizeAccount(acct.name, acct.type);
-      catMap[cat].push(acct);
-    });
-    const totalAccts = csvResult.accounts.length;
-    $('review-sub').textContent = `We found ${totalAccts} account${totalAccts!==1?'s':''} across ${csvResult.txCount.toLocaleString()} transactions. Adjust any balance that looks off.`;
+function goToReview(csvResult){
+  const catMap={cash:[],investments:[],retirement:[],homeEquity:[],debt:[]};
+  if(csvResult&&csvResult.accounts){
+    csvResult.accounts.forEach(a=>catMap[categorizeAccount(a.name,a.type)].push(a));
+    const tot=csvResult.accounts.length;
+    $('review-sub').textContent=`We found ${tot} account${tot!==1?'s':''} across ${csvResult.txCount.toLocaleString()} transactions. Adjust any balance that looks off.`;
   } else {
-    $('review-sub').textContent = 'Enter your current balances below — check your finance app for the latest numbers.';
+    $('review-sub').textContent='Enter your current balances below — check your finance app for the latest numbers.';
   }
-
-  state.csvAccountMap = catMap;
-
-  // Render review rows
-  $('review-rows').innerHTML = CATEGORIES.map(cat => {
-    const accts = catMap[cat.key] || [];
-    const sum = accts.reduce((s,a) => s + a.sum, 0);
-    const displayVal = cat.isDebt ? Math.abs(sum) : sum;
-    const txTotal = accts.reduce((s,a) => s + a.count, 0);
-
-    return `<div class="review-row">
-      <div class="review-row-left">
-        <div class="review-row-label${cat.isDebt?' debt-label':''}">${cat.label}</div>
-        <div class="acct-tags">
-          ${accts.length ? accts.map(a=>`<span class="acct-tag">${a.name}</span>`).join('') : '<span class="no-accts">No accounts detected</span>'}
-        </div>
-      </div>
-      <div>
-        <div class="balance-field">
-          <span class="balance-sign${cat.isDebt?' neg':''}">$</span>
-          <input class="balance-input${cat.isDebt?' debt-input':''}" data-cat="${cat.key}" data-isdebt="${cat.isDebt}"
-            value="${displayVal > 0 ? fmtComma(displayVal) : ''}"
-            placeholder="0" inputmode="numeric">
-        </div>
-        ${accts.length && txTotal > 0 ? `<div class="balance-hint">sum of ${txTotal.toLocaleString()} tx — verify in app</div>` : ''}
-      </div>
-    </div>`;
+  state.csvAccountMap=catMap;
+  $('review-rows').innerHTML=CATEGORIES.map(cat=>{
+    const accts=catMap[cat.key]||[], sum=accts.reduce((s,a)=>s+a.sum,0);
+    const displayVal=cat.isDebt?Math.abs(sum):sum, txTotal=accts.reduce((s,a)=>s+a.count,0);
+    return`<div class="review-row"><div class="review-row-left"><div class="review-row-label${cat.isDebt?' debt-label':''}">${cat.label}</div><div class="acct-tags">${accts.length?accts.map(a=>`<span class="acct-tag">${a.name}</span>`).join(''):'<span class="no-accts">No accounts detected</span>'}</div></div><div><div class="balance-field"><span class="balance-sign${cat.isDebt?' neg':''}">$</span><input class="balance-input${cat.isDebt?' debt-input':''}" data-cat="${cat.key}" data-isdebt="${cat.isDebt}" value="${displayVal>0?fmtComma(displayVal):''}" placeholder="0" inputmode="numeric"></div>${accts.length&&txTotal>0?`<div class="balance-hint">sum of ${txTotal.toLocaleString()} tx — verify in app</div>`:''}</div></div>`;
   }).join('');
-
-  // Live net worth update
   updateReviewNW();
-  $('review-rows').querySelectorAll('.balance-input').forEach(inp => {
-    inp.addEventListener('input', updateReviewNW);
-  });
-
+  $('review-rows').querySelectorAll('.balance-input').forEach(inp=>inp.addEventListener('input',updateReviewNW));
   showStage('stage-csv-review');
 }
 
-function updateReviewNW() {
-  let nw = 0;
-  $('review-rows').querySelectorAll('.balance-input').forEach(inp => {
-    const raw = parseFloat(inp.value.replace(/,/g,'')) || 0;
-    const isDebt = inp.dataset.isdebt === 'true';
-    nw += isDebt ? -raw : raw;
+function updateReviewNW(){
+  let nw=0;
+  $('review-rows').querySelectorAll('.balance-input').forEach(inp=>{
+    const raw=parseFloat(inp.value.replace(/,/g,''))||0;
+    nw+=inp.dataset.isdebt==='true'?-raw:raw;
   });
-  $('review-nw').textContent = (nw < 0 ? '−' : '') + fmtMoney(Math.abs(nw));
-  $('review-nw').style.color = nw < 0 ? 'var(--caution)' : 'var(--ink)';
+  $('review-nw').textContent=(nw<0?'−':'')+fmtMoney(Math.abs(nw));
+  $('review-nw').style.color=nw<0?'var(--caution)':'var(--ink)';
 }
 
-function confirmAccounts() {
-  const inputs = $('review-rows').querySelectorAll('.balance-input');
-  const newData = {};
-  CATEGORIES.forEach((cat, i) => {
-    const raw = parseFloat(inputs[i].value.replace(/,/g,'')) || 0;
-    const isDebt = cat.isDebt;
-    const accts = (state.csvAccountMap || {})[cat.key] || [];
-    newData[cat.key] = {
-      label: cat.label,
-      sub: accts.map(a=>a.name).join(' · '),
-      value: isDebt ? -raw : raw,
-    };
+async function confirmAccounts(){
+  const inputs=$('review-rows').querySelectorAll('.balance-input');
+  const newData={};
+  CATEGORIES.forEach((cat,i)=>{
+    const raw=parseFloat(inputs[i].value.replace(/,/g,''))||0;
+    const accts=(state.csvAccountMap||{})[cat.key]||[];
+    newData[cat.key]={label:cat.label,sub:accts.map(a=>a.name).join(' · '),value:cat.isDebt?-raw:raw};
   });
-  state.accountData = newData;
-  state.userAge = parseInt($('age-input').value) || 38;
-  saveState();
+  state.accountData=newData; state.userAge=parseInt($('age-input').value)||38;
+  if(authToken&&!isShareMode) await createPlan('My plan');
   goToReady(false);
 }
 
-function goToReady(isDemo) {
-  state.demoMode = isDemo;
-  const nw = netWorth();
-  const accts = isDemo ? DEMO_ACCOUNTS : (state.accountData || DEMO_ACCOUNTS);
-  const acctCount = isDemo ? 6 : Object.values(accts).filter(a=>a.value!==0).length;
-
-  $('ready-title').textContent = isDemo ? 'Demo mode is on'
-    : (PROV_MAP[state.connSource]?.name || 'Your data') + ' connected';
-  $('ready-sub').textContent = isDemo
-    ? 'You\'re exploring the Rivera household — a fictional family. None of this touches your real accounts.'
-    : 'Read-only access · ' + acctCount + ' accounts loaded · we never move your money.';
-  $('ready-accounts').textContent = acctCount;
-  $('ready-nw').textContent = fmtMoney(Math.abs(nw));
-
+function goToReady(isDemo){
+  state.demoMode=isDemo;
+  const nw=netWorth(), accts=isDemo?DEMO_ACCOUNTS:(state.accountData||DEMO_ACCOUNTS);
+  const acctCount=isDemo?6:Object.values(accts).filter(a=>a.value!==0).length;
+  $('ready-title').textContent=isDemo?'Demo mode is on':(PROV_MAP[state.connSource]?.name||'Your data')+' connected';
+  $('ready-sub').textContent=isDemo?'You\'re exploring the Rivera household — a fictional family.':'Read-only access · '+acctCount+' accounts loaded · we never move your money.';
+  $('ready-accounts').textContent=acctCount; $('ready-nw').textContent=fmtMoney(Math.abs(nw));
   showStage('stage-ready');
 }
 
-function goToChoose() {
-  state.connSource = null; state.demoMode = false;
-  state.accountData = null; state.csvAccountMap = null;
-  clearSavedState();
-  renderProviders(); updateConnectBtn();
-  showStage('stage-choose');
+function goToChoose(){
+  state.connSource=null;state.demoMode=false;state.accountData=null;state.csvAccountMap=null;
+  renderProviders();updateConnectBtn();showStage('stage-choose');
 }
 
-// ═══════════════════════════════════════════════════════════
-// CSV FILE HANDLING
-// ═══════════════════════════════════════════════════════════
-function handleCSVFile(file) {
-  if (!file) return;
-  $('dropzone-filename').textContent = '📄 ' + file.name;
-  $('dropzone-filename').style.display = 'block';
+function showResume(saved){
+  Object.assign(state,saved);
+  const nw=netWorth();
+  const srcName=state.demoMode?'Demo data':(state.connSource&&PROV_MAP[state.connSource]?PROV_MAP[state.connSource].name:'Manual entry');
+  $('resume-nw').textContent=fmtMoney(Math.abs(nw));
+  $('resume-nw-label').textContent=nw<0?'net worth (negative)':'net worth';
+  $('resume-source-line').textContent=currentPlanName+' · '+srcName;
+  $('resume-retire').textContent=state.retireAge;
+  $('resume-monthly').textContent='$'+state.monthly.toLocaleString();
+  $('resume-model').textContent=MODEL_LABELS[state.model]||state.model;
+  $('resume-spend').textContent=fmt(state.spend);
+  showStage('stage-resume');
+}
 
-  const reader = new FileReader();
-  reader.onload = e => {
-    const result = parseCSV(e.target.result);
-    if (result.error) {
-      alert('Problem reading CSV:\n\n' + result.error + '\n\nTry exporting again or use manual entry.');
-      return;
-    }
+// ═══════════════════════════════════════════════════
+// CSV FILE HANDLING
+// ═══════════════════════════════════════════════════
+function handleCSVFile(file){
+  if(!file) return;
+  $('dropzone-filename').textContent='📄 '+file.name; $('dropzone-filename').style.display='block';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const result=parseCSV(e.target.result);
+    if(result.error){alert('Problem reading CSV:\n\n'+result.error+'\n\nTry exporting again or use manual entry.');return;}
     goToReview(result);
   };
   reader.readAsText(file);
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // EVENT WIRING
-// ═══════════════════════════════════════════════════════════
-function $(id) { return document.getElementById(id); }
+// ═══════════════════════════════════════════════════
 
-// Choose stage
-$('connect-btn').addEventListener('click', () => { if (state.connSource) goToUpload(); });
-$('demo-btn').addEventListener('click', () => {
-  state.userAge = 38;
+// Auth
+$('login-btn').addEventListener('click',handleLogin);
+$('login-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
+$('signup-btn').addEventListener('click',handleSignup);
+$('signup-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleSignup();});
+$('goto-signup').addEventListener('click',()=>showStage('stage-signup'));
+$('goto-login').addEventListener('click',()=>showStage('stage-login'));
+$('goto-login-from-verify').addEventListener('click',()=>showStage('stage-login'));
+$('resend-btn').addEventListener('click',handleResend);
+
+// Connect
+$('connect-btn').addEventListener('click',()=>{if(state.connSource)goToUpload();});
+$('demo-btn').addEventListener('click',async()=>{
+  state.userAge=38;
+  if(authToken&&!isShareMode) await createPlan('Demo exploration');
   goToReady(true);
 });
-
-// CSV upload stage
-$('back-to-choose').addEventListener('click', () => showStage('stage-choose'));
-
-const dropzone = $('csv-dropzone');
-const fileInput = $('csv-file-input');
-fileInput.addEventListener('change', () => handleCSVFile(fileInput.files[0]));
-dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
-dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
-dropzone.addEventListener('drop', e => {
-  e.preventDefault(); dropzone.classList.remove('drag-over');
-  handleCSVFile(e.dataTransfer.files[0]);
-});
-$('skip-to-manual').addEventListener('click', () => goToReview(null));
-
-// CSV review stage
-$('back-to-upload').addEventListener('click', () => showStage('stage-csv-upload'));
-$('confirm-btn').addEventListener('click', confirmAccounts);
-
-// Ready stage
-$('open-planner-btn').addEventListener('click', () => {
-  showScreen('screen-lab');
-  render();
-});
-$('reset-link').addEventListener('click', goToChoose);
-
-// Resume stage
-$('resume-continue-btn').addEventListener('click', () => {
-  showScreen('screen-lab');
-  render();
-});
-$('resume-startfresh').addEventListener('click', () => {
-  // Reset planner inputs to defaults too
-  Object.assign(state, { retireAge:65, monthly:4300, ret:6, spend:132000,
-    house:false, college:false, yearoff:false, model:'4pct' });
-  goToChoose();
+$('back-to-choose').addEventListener('click',()=>showStage('stage-choose'));
+const dropzone=$('csv-dropzone'), fileInput=$('csv-file-input');
+fileInput.addEventListener('change',()=>handleCSVFile(fileInput.files[0]));
+dropzone.addEventListener('dragover',e=>{e.preventDefault();dropzone.classList.add('drag-over');});
+dropzone.addEventListener('dragleave',()=>dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop',e=>{e.preventDefault();dropzone.classList.remove('drag-over');handleCSVFile(e.dataTransfer.files[0]);});
+$('skip-to-manual').addEventListener('click',()=>goToReview(null));
+$('back-to-upload').addEventListener('click',()=>showStage('stage-csv-upload'));
+$('confirm-btn').addEventListener('click',confirmAccounts);
+$('open-planner-btn').addEventListener('click',()=>{showScreen('screen-lab');render();setSaveStatus('saved');});
+$('reset-link').addEventListener('click',goToChoose);
+$('resume-continue-btn').addEventListener('click',()=>{showScreen('screen-lab');render();setSaveStatus('saved');});
+$('resume-startfresh').addEventListener('click',()=>{
+  Object.assign(state,{retireAge:65,monthly:4300,ret:6,spend:132000,house:false,college:false,yearoff:false,model:'4pct'});
+  currentPlanId=null;localStorage.removeItem('current-plan-id');goToChoose();
 });
 
 // Lab
-$('back-btn').addEventListener('click', () => showScreen('screen-connect'));
-document.querySelectorAll('.model-card').forEach(el => {
-  el.addEventListener('click', () => { state.model = el.dataset.model; render(); saveState(); });
-});
-$('sl-retire').addEventListener('input',  e => { state.retireAge = +e.target.value; render(); saveState(); });
-$('sl-monthly').addEventListener('input', e => { state.monthly   = +e.target.value; render(); saveState(); });
-$('sl-ret').addEventListener('input',     e => { state.ret       = +e.target.value; render(); saveState(); });
-$('sl-spend').addEventListener('input',   e => { state.spend     = +e.target.value; render(); saveState(); });
-$('pill-house').addEventListener('click',   () => { state.house   = !state.house;   render(); saveState(); });
-$('pill-college').addEventListener('click', () => { state.college = !state.college; render(); saveState(); });
-$('pill-yearoff').addEventListener('click', () => { state.yearoff = !state.yearoff; render(); saveState(); });
+$('back-btn').addEventListener('click',()=>showScreen('screen-connect'));
+document.querySelectorAll('.model-card').forEach(el=>el.addEventListener('click',()=>{state.model=el.dataset.model;render();scheduleSave();}));
+$('sl-retire').addEventListener('input',e=>{state.retireAge=+e.target.value;render();scheduleSave();});
+$('sl-monthly').addEventListener('input',e=>{state.monthly=+e.target.value;render();scheduleSave();});
+$('sl-ret').addEventListener('input',e=>{state.ret=+e.target.value;render();scheduleSave();});
+$('sl-spend').addEventListener('input',e=>{state.spend=+e.target.value;render();scheduleSave();});
+$('pill-house').addEventListener('click',()=>{state.house=!state.house;render();scheduleSave();});
+$('pill-college').addEventListener('click',()=>{state.college=!state.college;render();scheduleSave();});
+$('pill-yearoff').addEventListener('click',()=>{state.yearoff=!state.yearoff;render();scheduleSave();});
 
-// ═══════════════════════════════════════════════════════════
+// Plan bar
+$('plan-name-btn').addEventListener('click',e=>{
+  if(isShareMode) return; e.stopPropagation();
+  const dd=$('plan-dropdown');
+  if(dd.style.display==='none') showPlanDropdown(); else hidePlanDropdown();
+});
+document.addEventListener('click',e=>{
+  if(!$('plan-dropdown').contains(e.target)&&e.target!==$('plan-name-btn')) hidePlanDropdown();
+});
+$('new-plan-btn').addEventListener('click',()=>{
+  hidePlanDropdown(); currentPlanId=null; localStorage.removeItem('current-plan-id');
+  Object.assign(state,{retireAge:65,monthly:4300,ret:6,spend:132000,house:false,college:false,yearoff:false,model:'4pct',connSource:null,demoMode:false,accountData:null});
+  updatePlanBar('My plan'); setSaveStatus(''); showScreen('screen-connect'); showStage('stage-choose');
+});
+$('share-btn').addEventListener('click',openShareModal);
+$('share-copy-btn').addEventListener('click',()=>{
+  const url=$('share-url-input').value;
+  if(!url||url.startsWith('Error')||url.startsWith('Generating')) return;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn=$('share-copy-btn'); btn.textContent='Copied!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy link';btn.classList.remove('copied');},2000);
+  });
+});
+$('share-close-btn').addEventListener('click',()=>{$('share-modal').style.display='none';});
+$('share-modal').addEventListener('click',e=>{if(e.target===$('share-modal'))$('share-modal').style.display='none';});
+$('logout-btn').addEventListener('click',()=>{clearAuth();showScreen('screen-auth');showStage('stage-login');});
+
+// ═══════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 renderProviders();
 updateConnectBtn();
 
-const saved = loadSavedState();
-if (saved && (saved.accountData || saved.demoMode)) {
-  showResume(saved);
-} else {
-  showStage('stage-choose');
+async function init(){
+  const params=new URLSearchParams(window.location.search);
+
+  if(params.has('verify')){
+    const ok=await handleVerifyToken(params.get('verify'));
+    window.history.replaceState({},'',window.location.pathname);
+    showScreen('screen-auth'); showStage(ok?'stage-verified':'stage-login'); return;
+  }
+
+  if(params.has('share')){
+    shareToken=params.get('share'); isShareMode=true;
+    window.history.replaceState({},'',window.location.pathname);
+    try {
+      const plan=await api('GET','/share/'+shareToken);
+      Object.assign(state,JSON.parse(plan.state_json||'{}'));
+      showScreen('screen-lab'); render(); setupSharePlanBar(); setSaveStatus('saved');
+    } catch(e){
+      showToast('Could not load shared plan — the link may be expired.');
+      showScreen('screen-auth'); showStage('stage-login');
+    }
+    return;
+  }
+
+  if(authToken){
+    try {
+      const plans=await api('GET','/plans');
+      if(plans.length>0){
+        const r=plans[0]; currentPlanId=r.id; currentPlanName=r.name;
+        localStorage.setItem('current-plan-id',currentPlanId);
+        Object.assign(state,JSON.parse(r.state_json||'{}'));
+        updatePlanBar(r.name); showScreen('screen-connect'); showResume(state); return;
+      }
+      showScreen('screen-connect'); showStage('stage-choose'); return;
+    } catch(e){ clearAuth(); }
+  }
+
+  showScreen('screen-auth'); showStage('stage-login');
 }
+
+init();
 </script>
 </body>
 </html>
