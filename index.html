@@ -623,8 +623,8 @@ const PROV_MAP = Object.fromEntries(PROVIDERS.map(p => [p.key, p]));
 const EXPORT_STEPS = {
   simplifi: {
     headline:'Connect Quicken Simplifi',
-    sub:'Pull your account balances from the Simplifi Net Worth report — then enter them below.',
-    steps:['Open Simplifi and go to Reports (left sidebar)','Select "Net Worth" and set the date to today','Note the balance for each account in the report','Click "Skip" below and enter those balances manually']
+    sub:'Export the Net Worth report as a CSV — we\'ll read your account balances automatically.',
+    steps:['In Simplifi, click Reports in the left sidebar','Select the Net Worth report','Click the export/download icon and choose CSV (Flat)','Upload the file below']
   },
   manual: {
     headline:'Import from CSV',
@@ -649,10 +649,18 @@ function parseCSVLine(line) {
   return r.map(s=>s.replace(/^"|"$/g,'').trim());
 }
 
+const MONTH_ORDER=['january','february','march','april','may','june','july','august','september','october','november','december'];
+
 function parseCSV(text) {
   const lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
   if (lines.length<2) return {error:'File is too short.'};
-  const hdrs=parseCSVLine(lines[0]).map(h=>h.toLowerCase());
+  const hdrs=parseCSVLine(lines[0]).map(h=>h.toLowerCase().trim());
+
+  // Detect Simplifi flat format: has "account type", "account", "month", "amount"
+  const isSimplifi = hdrs.includes('account type') && hdrs.includes('month');
+  if (isSimplifi) return parseSimplifiFlat(lines, hdrs);
+
+  // Generic format
   const ai=hdrs.findIndex(h=>h==='amount'||h.includes('amount')||h==='amt');
   const ci=hdrs.findIndex(h=>h==='account'||h==='account name'||h.includes('account'));
   const ti=hdrs.findIndex(h=>h==='account type'||h==='type'||h.includes('account type'));
@@ -672,11 +680,37 @@ function parseCSV(text) {
   return {accounts:Object.values(map),txCount:tx};
 }
 
+function parseSimplifiFlat(lines, hdrs) {
+  // Columns: Income/Expense, Account Type, Account, Month, Amount
+  const typeI=hdrs.indexOf('account type');
+  const acctI=hdrs.indexOf('account');
+  const monthI=hdrs.indexOf('month');
+  const amtI=hdrs.indexOf('amount');
+  if (acctI===-1||amtI===-1||monthI===-1) return {error:'Unexpected Simplifi CSV format.'};
+
+  // For each account, keep only the most recent month's value
+  const map={}; // acct -> {name, type, monthIdx, value}
+  for (let i=1; i<lines.length; i++) {
+    const l=lines[i].trim(); if(!l) continue;
+    const cols=parseCSVLine(l);
+    const acct=cols[acctI]||''; if(!acct) continue;
+    const type=typeI>=0?(cols[typeI]||''):'';
+    const month=(cols[monthI]||'').toLowerCase().trim();
+    const raw=cols[amtI]||'0';
+    const amt=parseFloat(raw.replace(/[$,\s]/g,'').replace(/^\((.+)\)$/,'-$1'))||0;
+    const mIdx=MONTH_ORDER.indexOf(month);
+    if(!map[acct]||mIdx>map[acct].monthIdx) map[acct]={name:acct,type,monthIdx:mIdx,sum:amt,count:1};
+  }
+  const accounts=Object.values(map).map(a=>({name:a.name,type:a.type,sum:a.sum,count:a.count}));
+  if (!accounts.length) return {error:'No accounts found in Simplifi CSV.'};
+  return {accounts, txCount:accounts.length, isSimplifi:true};
+}
+
 function categorizeAccount(name,type) {
   const t=(name+' '+type).toLowerCase();
   if (/401[( ]?k|403[( ]?b|457|sep.?ira|simple.?ira|\bira\b|roth|retirement|pension/.test(t)) return 'retirement';
-  if (/brokerage|invest|taxable|stock|etf|mutual.?fund|securities|portfolio/.test(t)) return 'investments';
-  if (/mortgage|home.?loan|heloc|home.?equity.?line|credit.?card|credit|auto.?loan|student.?loan|personal.?loan|line.?of.?credit/.test(t)) return 'debt';
+  if (/brokerage|invest|taxable|stock|etf|mutual.?fund|securities|portfolio|coinbase|crypto/.test(t)) return 'investments';
+  if (/mortgage|home.?loan|heloc|home.?equity.?line|credit.?card|credit|auto.?loan|student.?loan|personal.?loan|line.?of.?credit|other.?liabilit|boat|vehicle/.test(t)) return 'debt';
   if (/home.?equity|property|real.?estate/.test(t)) return 'homeEquity';
   return 'cash';
 }
