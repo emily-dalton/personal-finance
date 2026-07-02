@@ -58,6 +58,8 @@ def signup(body: SignupRequest, db: Session = Depends(get_db)):
             raise HTTPException(status_code=409, detail="An account with this email already exists.")
         if len(body.password) < 8:
             raise HTTPException(status_code=422, detail="Password must be at least 8 characters.")
+        if len(body.password.encode("utf-8")) > 72:
+            raise HTTPException(status_code=422, detail="Password must be 72 characters or fewer.")
 
         user = User(email=body.email, password_hash=hash_password(body.password))
         db.add(user)
