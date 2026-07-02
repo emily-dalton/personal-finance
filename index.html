@@ -624,7 +624,7 @@ const EXPORT_STEPS = {
   simplifi: {
     headline:'Connect Quicken Simplifi',
     sub:'Export the Net Worth report as a CSV — we\'ll read your account balances automatically.',
-    steps:['In Simplifi, click Reports in the left sidebar','Select the Net Worth report','Click the export/download icon and choose CSV (Flat)','Upload the file below']
+    steps:['In Simplifi, click Reports in the left sidebar and open Net Worth','Set the date range to include today (e.g. "Recent 6 Months") and grouping to Month','Click the three-dot menu (⋮) and choose Export → CSV (Flat)','Upload the file below — we\'ll use the most recent period\'s balances']
   },
   manual: {
     headline:'Import from CSV',
@@ -688,18 +688,17 @@ function parseSimplifiFlat(lines, hdrs) {
   const amtI=hdrs.indexOf('amount');
   if (acctI===-1||amtI===-1||monthI===-1) return {error:'Unexpected Simplifi CSV format.'};
 
-  // For each account, keep only the most recent month's value
-  const map={}; // acct -> {name, type, monthIdx, value}
+  // For each account, keep the last row seen (Simplifi exports chronologically,
+  // so the last row = most recent period regardless of Day/Week/Month grouping)
+  const map={}; // acct -> {name, type, sum, count}
   for (let i=1; i<lines.length; i++) {
     const l=lines[i].trim(); if(!l) continue;
     const cols=parseCSVLine(l);
     const acct=cols[acctI]||''; if(!acct) continue;
     const type=typeI>=0?(cols[typeI]||''):'';
-    const month=(cols[monthI]||'').toLowerCase().trim();
     const raw=cols[amtI]||'0';
     const amt=parseFloat(raw.replace(/[$,\s]/g,'').replace(/^\((.+)\)$/,'-$1'))||0;
-    const mIdx=MONTH_ORDER.indexOf(month);
-    if(!map[acct]||mIdx>map[acct].monthIdx) map[acct]={name:acct,type,monthIdx:mIdx,sum:amt,count:1};
+    map[acct]={name:acct,type,sum:amt,count:1};
   }
   const accounts=Object.values(map).map(a=>({name:a.name,type:a.type,sum:a.sum,count:a.count}));
   if (!accounts.length) return {error:'No accounts found in Simplifi CSV.'};
