@@ -623,8 +623,8 @@ const PROV_MAP = Object.fromEntries(PROVIDERS.map(p => [p.key, p]));
 const EXPORT_STEPS = {
   simplifi: {
     headline:'Connect Quicken Simplifi',
-    sub:'Export your transactions — we\'ll read your account balances from the data.',
-    steps:['Open Simplifi and click your profile / Settings','Find "Export Data" and choose "Transactions"','Set the date range to "All Time" for the most complete picture','Download the CSV and upload it below']
+    sub:'Pull your account balances from the Simplifi Net Worth report — then enter them below.',
+    steps:['Open Simplifi and go to Reports (left sidebar)','Select "Net Worth" and set the date to today','Note the balance for each account in the report','Click "Skip" below and enter those balances manually']
   },
   manual: {
     headline:'Import from CSV',
