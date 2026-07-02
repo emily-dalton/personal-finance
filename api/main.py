@@ -53,25 +53,31 @@ def get_current_user(
 
 @app.post("/auth/signup", response_model=MessageResponse, status_code=201)
 def signup(body: SignupRequest, db: Session = Depends(get_db)):
-    if db.query(User).filter(User.email == body.email).first():
-        raise HTTPException(status_code=409, detail="An account with this email already exists.")
-    if len(body.password) < 8:
-        raise HTTPException(status_code=422, detail="Password must be at least 8 characters.")
+    try:
+        if db.query(User).filter(User.email == body.email).first():
+            raise HTTPException(status_code=409, detail="An account with this email already exists.")
+        if len(body.password) < 8:
+            raise HTTPException(status_code=422, detail="Password must be at least 8 characters.")
 
-    user = User(email=body.email, password_hash=hash_password(body.password))
-    db.add(user)
-    db.flush()
+        user = User(email=body.email, password_hash=hash_password(body.password))
+        db.add(user)
+        db.flush()
 
-    token = VerificationToken(
-        user_id=user.id,
-        token=str(uuid.uuid4()),
-        expires_at=datetime.utcnow() + timedelta(hours=24),
-    )
-    db.add(token)
-    db.commit()
+        token = VerificationToken(
+            user_id=user.id,
+            token=str(uuid.uuid4()),
+            expires_at=datetime.utcnow() + timedelta(hours=24),
+        )
+        db.add(token)
+        db.commit()
 
-    send_verification_email(user.email, token.token)
-    return {"message": "Account created. Check your email to verify your address."}
+        send_verification_email(user.email, token.token)
+        return {"message": "Account created. Check your email to verify your address."}
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Signup error: {type(e).__name__}: {e}\n{traceback.format_exc()}")
 
 
 @app.get("/auth/verify/{token}", response_model=MessageResponse)
