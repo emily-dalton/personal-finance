@@ -662,7 +662,7 @@ function parseCSV(text) {
   for (let i=1; i<lines.length; i++) {
     const l=lines[i].trim(); if(!l) continue;
     const cols=parseCSVLine(l);
-    const acct=cols[ci]||'', raw=cols[ai]||'0', type=ti>=0?(cols[ti]||')':'';
+    const acct=cols[ci]||'', raw=cols[ai]||'0', type=ti>=0?(cols[ti]||''):'';
     if(!acct) continue;
     const amt=parseFloat(raw.replace(/[$,\s]/g,'').replace(/^\((.+)\)$/,'-$1'))||0;
     if(!map[acct]) map[acct]={name:acct,type,sum:0,count:0};
